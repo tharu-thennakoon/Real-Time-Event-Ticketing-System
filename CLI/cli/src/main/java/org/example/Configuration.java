@@ -1,5 +1,6 @@
 package org.example;
 
+
 public class Configuration {
     private final int totalTickets;
     private final int ticketReleaseRate;

@@ -18,7 +18,7 @@ public class Vendor implements Runnable {
     public void run() {
         try{
             while (running) {
-                TicketPool.Ticket ticket = new Ticket( ticketPool.getNextTicketId(),id );
+                Ticket ticket = new Ticket( ticketPool.getNextTicketId(),id );
                 ticketPool.addTicket(ticket);
                 System.out.println("Vendor" + id + "added ticket" + ticket.getId());
             }

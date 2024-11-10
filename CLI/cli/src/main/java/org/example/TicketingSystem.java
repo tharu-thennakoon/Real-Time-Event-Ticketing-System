@@ -1,6 +1,5 @@
 package org.example;
 import java.util.List;
-import java.lang.module.Configuration;
 import java.util.ArrayList;
 
 public class TicketingSystem {
@@ -23,7 +22,7 @@ public class TicketingSystem {
         }
     }
 
-    public synchronized start() {
+    public synchronized void start() {
         if (!running) return;
         running = true;
 
@@ -34,7 +33,7 @@ public class TicketingSystem {
             vendorThread.start();
         }
 
-        for (int i = 0; i < config.getTotalTicket();i++){
+        for (int i = 0; i < config.getTotalTickets();i++){
             Customer customer = new Customer(i,ticketPool,config);
             Thread customerThread = new Thread(customer);
             customerthreads.add(customerThread);
@@ -42,7 +41,7 @@ public class TicketingSystem {
         }
     }
 
-    public synchronized void stop() {
+    public  synchronized void stop() {
         if (!running) return;
         running = false;
 
@@ -55,11 +54,11 @@ public class TicketingSystem {
         }
     }
 
-    public boolean isRunning() {
+    public  boolean isRunning() {
         return running;
     }
 
     public int getAvailableTickets() {
-        return ticketPool.getTicketCount;
+        return ticketPool.getTicketCount();
     }
 }

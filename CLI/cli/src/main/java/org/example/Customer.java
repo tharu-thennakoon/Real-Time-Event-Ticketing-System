@@ -1,7 +1,5 @@
 package org.example;
 
-import java.lang.module.Configuration;
-import java.util.logging.Logger;
 
 public class Customer implements Runnable {
     private final int id;
