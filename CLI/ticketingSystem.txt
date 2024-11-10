@@ -1,0 +1,6 @@
+#Ticketing System Configuration
+#Sun Nov 10 13:48:26 IST 2024
+customerRetrievalRate=1
+maxTicketCapacity=1
+ticketReleaseRate=1
+totalTickets=1

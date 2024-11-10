@@ -10,7 +10,7 @@ public class TicketPool {
     private final BlockingQueue<Integer> tickets;
     private final int maxCapacity;
     private int totalTicketsTarget;
-    private final int totalTickets;
+    private  int totalTicketsProcessed;
     private volatile boolean isRunning;
 
     public TicketPool(int maxCapacity, int totalTicket) {
