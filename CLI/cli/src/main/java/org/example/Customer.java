@@ -2,49 +2,37 @@ package org.example;
 
 
 public class Customer implements Runnable {
-    private final int id;
-    private final TicketPool ticketPool;
-    private final Configuration config;
-    private volatile boolean running;
-    private int ticketsPurchased;
+   private final TicketPool ticketPool;
+   private final int retrievalRate;
+   private final int customerId;
+   private int ticketsPurchased;
 
-    public Customer(int id, TicketPool ticketPool, Configuration config) {
-        this.id = id;
-        this.ticketPool = ticketPool;
-        this.config = config;
-        this.running = true;
-        this.ticketsPurchased = 0;
-    }
+   public Customer(int customerId, TicketPool ticketPool, int retrievalRate) {
+       this.customerId = customerId;
+       this.ticketPool = ticketPool;
+       this.retrievalRate = retrievalRate;
+       this.ticketsPurchased = 0;
+   }
 
-    @Override
+   @Override
     public void run() {
-        try {
-            while (running) {
-                Ticket ticket = ticketPool.removeTicket();
-                if (ticket != null) {
-                    ticketsPurchased++;
-                    System.out.println("Customer " + id + " purchased ticket " + ticket.getId() +
-                            "from Vendor" + ticket.getVendorId());
-                }
+       while (ticketPool.isRunning()){
+           try {
+               Integer ticket = ticketPool.removeTicket();
+               if(ticket != null){
+                   ticketsPurchased++;
+                   System.out.println("Customer " + customerId + " purchased ticket " + ticket);
+               }
+               Thread.sleep(1000 / retrievalRate);
+           }
+           catch (InterruptedException e){
+               Thread.currentThread().interrupt();
+               break;
+           }
+       }
+   }
 
-                Thread.sleep(config.getCustomerReleaseRate());
-            }
-
-        }
-        catch (Exception e){
-            Thread.currentThread().interrupt();
-            System.out.println("Customer " + id + " has been interrupted");
-        }
-    }
-
-    public void stop(){
-        running = false;
-    }
-
-    public int getId(){
-        return id;
-    }
-    public int getTicketsPurchased(){
-        return ticketsPurchased;
-    }
+   public int getTicketsPurchased() {
+       return ticketsPurchased;
+   }
 }

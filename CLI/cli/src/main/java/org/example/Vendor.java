@@ -2,35 +2,41 @@ package org.example;
 
 
 public class Vendor implements Runnable {
-    private final int id;
     private final TicketPool ticketPool;
-    private final Configuration config;
-    private volatile boolean running;
+    private final int releaseRate;
+    private final int vendorId;
+    private int ticketsReleased;
 
-    public Vendor( int id,  TicketPool ticketPool,  Configuration config) {
-        this.id = id;
+    public Vendor(int vendorId , TicketPool ticketPool , int releaseRate) {
+        this.vendorId = vendorId;
         this.ticketPool = ticketPool;
-        this.config = config;
-        this.running = true;
+        this.releaseRate = releaseRate;
+        this.ticketsReleased = 0;
+
     }
 
     @Override
     public void run() {
-        try{
-            while (running) {
-                Ticket ticket = new Ticket( ticketPool.getNextTicketId(),id );
-                ticketPool.addTicket(ticket);
-                System.out.println("Vendor" + id + "added ticket" + ticket.getId());
+        while (ticketPool.isRunning()){
+            try{
+                if(ticketPool.addTicket(ticketsReleased + 1)){
+                    ticketsReleased++;
+                    System.out.println("vendor " + vendorId + " released ticket   " + ticketsReleased);
+                    Thread.sleep(1000 / releaseRate);
+                }
+                else{
+                    break;
+                }
             }
 
-        }
-        catch (Exception e){
-            Thread.currentThread().interrupt();
-            System.out.println("Vendor" + id + "was interrupted");
+            catch (InterruptedException e){
+                Thread.currentThread().interrupt();
+                break;
+            }
         }
     }
 
-    public void stop() {
-        running = false;
+    public int getTicketsReleased() {
+        return ticketsReleased;
     }
 }

@@ -3,62 +3,104 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class TicketingSystem {
-    private final TicketPool ticketPool;
     private final Configuration config;
-    private final List<Thread> customerthreads;
-    private final List<Thread> vendorThreads;
-    private boolean running;
+    private TicketPool ticketPool;
+    private List<Thread> vendorThreads;
+    public List<Thread> customerThreads;
+    public List<Vendor> vendors;
+    private List<Customer> customers;
+    private boolean isRunning;
 
-    public TicketingSystem(final Configuration config) {
+    public TicketingSystem( Configuration config) {
         this.config = config;
-        this.ticketPool = new TicketPool(config.getMaxTicketCapacity());
-        this.customerthreads = new ArrayList<>();
         this.vendorThreads = new ArrayList<>();
-        this.running = false;
+        this.customerThreads = new ArrayList<>();
+        this.vendors = new ArrayList<>();
+        this.customers = new ArrayList<>();
+        this.isRunning = false;
+    }
 
-        for (int i=0; i<config.getTotalTickets();i++){
-            ticketPool.addTicket(new Ticket(i,1));
+    public void start() {
+        if (isRunning) {
+            System.out.println("Ticketing system is already running");
+            return;
+        }
 
+        ticketPool = new TicketPool(config.getMaxTicketCapacity(),config.getTotalTickets());
+        isRunning = true;
+
+        for (int i=0; i <3; i++){
+            Vendor vendor = new Vendor(i + 1 , ticketPool, config.getTicketReleaseRate());
+            vendors.add(vendor);
+            Thread vendorthread = new Thread(vendor);
+            vendorThreads.add(vendorthread);
+            vendorthread.start();
+        }
+
+        for (int i = 0; i < 5; i++){
+            Customer customer = new Customer(i + 1 , ticketPool, config.getTicketReleaseRate());
+            customers.add(customer);
+            Thread customerthread = new Thread(customer);
+            customerThreads.add(customerthread);
+            customerthread.start();
         }
     }
 
-    public synchronized void start() {
-        if (!running) return;
-        running = true;
-
-        for (int i = 0; i < 2;i++){
-            Vendor vendor = new Vendor(i,ticketPool,config);
-            Thread vendorThread = new Thread(vendor);
-            vendorThreads.add(vendorThread);
-            vendorThread.start();
+    public void stop() {
+        if(!isRunning){
+            System.out.println("System is not running! ");
+            return;
         }
 
-        for (int i = 0; i < config.getTotalTickets();i++){
-            Customer customer = new Customer(i,ticketPool,config);
-            Thread customerThread = new Thread(customer);
-            customerthreads.add(customerThread);
-            customerThread.start();
+        ticketPool.stop();
+        isRunning = false;
+
+        for(Thread thread : vendorThreads){
+            try{
+                thread.join();
+            }
+            catch(InterruptedException e){
+                Thread.currentThread().interrupt();
+            }
         }
+
+        for(Thread thread : customerThreads){
+            try {
+                thread.join();
+
+            }
+            catch(InterruptedException e){
+                Thread.currentThread().interrupt();
+            }
+        }
+
+        vendorThreads.clear();
+        customerThreads.clear();
+        vendors.clear();
+        customers.clear();
     }
 
-    public  synchronized void stop() {
-        if (!running) return;
-        running = false;
-
-        for (Thread thread : vendorThreads){
-            thread.interrupt();
+    public void displayStatus(){
+        if (ticketPool == null) {
+            System.out.println("System has not been started yet!");
+            return;
         }
 
-        for (Thread thread : customerthreads){
-            thread.interrupt();
+        System.out.println("Ticketing system status");
+        System.out.println("Running: " + isRunning);
+        System.out.println("Available Tickets: " + ticketPool.getAvailableTickets());
+        System.out.println("Total Tickets Processed : " + ticketPool.getTotalTicketsProcessed());
+
+        System.out.println("\nCustomer Statistics: ");
+        for (int i = 0; i < customers.size(); i++) {
+            System.out.println("Customer " + (i + 1) + "purchased" +
+                    customers.get(i).getTicketsPurchased() + "tickets");
         }
+
+        System.out.println("==========================\n");
     }
 
-    public  boolean isRunning() {
-        return running;
-    }
-
-    public int getAvailableTickets() {
-        return ticketPool.getTicketCount();
+    public boolean isRunning() {
+        return isRunning;
     }
 }

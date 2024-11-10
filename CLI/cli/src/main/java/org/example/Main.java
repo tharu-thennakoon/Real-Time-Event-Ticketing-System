@@ -1,101 +1,101 @@
 package org.example;
+
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
-    private static TicketingSystem system;
-    private static final Scanner scanner = new Scanner(System.in);
-
     public static void main(String[] args) {
-        System.out.println("        Welcome to the Real-Time Event Ticketing System     ");
+        Scanner scanner = new Scanner(System.in);
+        Configuration config = new Configuration();
+        TicketingSystem system = new TicketingSystem(config);
 
-        int totalTicket = 10;
-        int ticketReleaseRate = 2;
-        int customerReleaseRate = 3;
-        int maxTicketCapacity = 20;
+        while (true) {
+            System.out.println("     Welcome to Real-Time Event Ticketing System      ");
+            System.out.println("System Menu:");
+            System.out.println("1. Configure System");
+            System.out.println("2. Start Ticketing System");
+            System.out.println("3. Stop Ticketing System");
+            System.out.println("4. Display Status");
+            System.out.println("5. Save Configuration");
+            System.out.println("6. Load Configuration");
+            System.out.println("7. Exit");
+            System.out.println("Enter your choice: ");
 
-        Configuration config = new Configuration(totalTicket, ticketReleaseRate, customerReleaseRate, maxTicketCapacity);
-        system = new TicketingSystem(config);
-
-        boolean running = true;
-        while (running){
-            displayMenu();
-            int choice = getValidIntInput();
+            int choice = scanner.nextInt();
 
             switch (choice) {
                 case 1:
-                    startSystem();
+                    configureSystem(scanner, config);
                     break;
                 case 2:
-                    stopSystem();
+                    system.start();
                     break;
                 case 3:
-                    displayStatus();
+                    system.stop();
                     break;
                 case 4:
-                    running = false;
-                    if (system.isRunning()){
-                        stopSystem();
-                    }
+                    system.displayStatus();
                     break;
+                case 5:
+                    saveConfiguration(config);
+                    break;
+                case 6:
+                    loadConfiguration(config);
+                case 7:
+                    if (system.isRunning()){
+                        system.stop();
+                    }
+                    System.out.println("Thank You For Using Event Ticketing System.Good Bye!");
+                    scanner.close();
+                    System.exit(0);
                 default:
-                    System.out.println("Invalid choice. Please try again.");
+                    System.out.println("Invalid choice. Try again.");
+
             }
-        }
 
-        scanner.close();
-        System.out.println("Thank you for using Real-Time Event Ticketing System! Goodbye!");
-
-    }
-
-    private static void displayMenu() {
-        System.out.println("System Menu : ");
-        System.out.println("1. Start System");
-        System.out.println("2. Stop System");
-        System.out.println("3. Display Status");
-        System.out.println("4. Exit");
-        System.out.println("Enter your choice : ");
-    }
-
-    private static int getValidIntInput() {
-        while (true) {
-            try{
-                int value = scanner.nextInt();
-                if (value <= 0){
-                    System.out.println("Invalid input. Please enter a positive number.");
-                    continue;
-                }
-                return value;
-            }
-            catch (Exception e){
-                System.out.println("Invalid input. Please enter a valid number.");
-                scanner.next();
-            }
         }
     }
 
-    private static void startSystem() {
-        if(!system.isRunning()){
-            system.start();
-            System.out.println("System started successfully.");
+    private static void configureSystem(Scanner scanner, Configuration config) {
+        System.out.println("Enter total number of tickets : ");
+        int totalTickets = scanner.nextInt();
+
+        System.out.println("Enter ticket release rate(per second) : ");
+        int releaseRate = scanner.nextInt();
+
+        System.out.println("Enter customer retrieval rate (per second) : ");
+        int retrievalRate = scanner.nextInt();
+
+        System.out.println("Enter maximum ticket capacity : ");
+        int maxCapacity = scanner.nextInt();
+
+        config.setConfiguration(totalTickets, releaseRate, retrievalRate, maxCapacity);
+        System.out.println("Configuration updated successfully.");
+    }
+
+    private static void saveConfiguration(Configuration config) {
+        try {
+            config.saveToFile();
+            System.out.println("Configuration saved successfully.");
+
         }
-        else {
-            System.out.println("System is already running.");
+        catch (IOException e) {
+            System.out.println("Error saving configuration." + e.getMessage());
         }
     }
 
-    private static void stopSystem() {
-        if(system.isRunning()){
-            system.stop();
-            System.out.println("System stopped successfully.");
+    private static void loadConfiguration(Configuration config) {
+        try{
+            config.loadFromFile();
+            System.out.println("Configuration loaded successfully.");
+            System.out.println("Total Tickets : " + config.getTotalTickets());
+            System.out.println("Ticket release rate : " + config.getTicketReleaseRate());
+            System.out.println("Customer retrieval rate : " + config.getCustomerRetrievalRate());
+            System.out.println("Maximum Ticket Capacity : " + config.getMaxTicketCapacity());
         }
-        else {
-            System.out.println("System is already stopped.");
-        }
-    }
 
-    private static void displayStatus() {
-        System.out.println("System Status : ");
-        System.out.println("System running : " + system.isRunning());
-        System.out.println("Available Tickets : " + system.getAvailableTickets());
+        catch (IOException e) {
+            System.out.println("Error loading configuration." + e.getMessage());
+        }
     }
 }
