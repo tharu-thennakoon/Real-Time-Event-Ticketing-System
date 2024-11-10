@@ -34,7 +34,7 @@ public class Configuration {
         props.setProperty("customerRetrievalRate", String.valueOf(customerRetrievalRate));
         props.setProperty("maxTicketCapacity", String.valueOf(maxTicketCapacity));
 
-        try(FileWriter writter = new FileWriter(CONFIG_FILE)) {
+        try(FileWriter writter = new FileWriter("ticketingSystem.txt")) {
             props.store(writter, "Ticketing System Configuration");
 
         }
@@ -42,7 +42,7 @@ public class Configuration {
 
     public void loadFromFile() throws IOException {
         Properties props = new Properties();
-        try(FileReader reader = new FileReader(CONFIG_FILE)){
+        try(FileReader reader = new FileReader("ticketingSystem.txt")){
             props.load(reader);
             totalTickets = Integer.parseInt(props.getProperty("totalTickets"));
             ticketReleaseRate = Integer.parseInt(props.getProperty("ticketReleaseRate"));
