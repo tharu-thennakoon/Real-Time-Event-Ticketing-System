@@ -9,6 +9,9 @@ public class Main {
         Configuration config = new Configuration();
         TicketingSystem system = new TicketingSystem(config);
 
+        System.out.println("Current System Parameters");
+        displayCurrentConfiguration(config);
+
         while (true) {
             System.out.println("     Welcome to Real-Time Event Ticketing System      ");
             System.out.println("System Menu:");
@@ -56,6 +59,16 @@ public class Main {
         }
     }
 
+    private static void displayCurrentConfiguration(Configuration config) {
+        System.out.println("\n>>>>  Current Configuration Details <<<<");
+        System.out.println("----------------------------------------------------------------------");
+        System.out.printf("Total Tickets                : %d\n" , config.getTotalTickets());
+        System.out.printf("Ticket Release Rate          : %d tickets/second\n" , config.getTicketReleaseRate());
+        System.out.printf("Customer retrieval Rate      : %d tickets/second\n" , config.getCustomerRetrievalRate());
+        System.out.printf("Maximum Ticket Capasity      : %d\n", config.getMaxTicketCapacity());
+        System.out.println("----------------------------------------------------------------------");
+    }
+
     private static void configureSystem(Scanner scanner, Configuration config) {
         System.out.println("Enter total number of tickets : ");
         int totalTickets = scanner.nextInt();
@@ -98,4 +111,6 @@ public class Main {
             System.out.println("Error loading configuration." + e.getMessage());
         }
     }
+
+
 }
