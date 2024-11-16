@@ -2,16 +2,20 @@ package org.example;
 
 
 public class Customer implements Runnable {
+   private final String name;
+   private final int id;
+   private final String email;
    private final TicketPool ticketPool;
    private final int retrievalRate;
-   private final int customerId;
    private int ticketsPurchased;
 
-   public Customer(int customerId, TicketPool ticketPool, int retrievalRate) {
-       this.customerId = customerId;
+   public Customer(String name, int id, String email, TicketPool ticketPool, int retrievalRate) {
+       this.name = name;
+       this.id = id;
+       this.email = email;
        this.ticketPool = ticketPool;
        this.retrievalRate = retrievalRate;
-       this.ticketsPurchased = 0;
+       ticketsPurchased = 0;
    }
 
    @Override
@@ -21,9 +25,10 @@ public class Customer implements Runnable {
                Integer ticket = ticketPool.removeTicket();
                if(ticket != null){
                    ticketsPurchased++;
-                   System.out.println("Customer " + customerId + " purchased ticket " + ticket);
+                   System.out.println("Customer " + name + " (ID: " + id + ") purchased ticket " + ticket);
                }
-               Thread.sleep(1000 / retrievalRate);
+               // Adjust sleep time: 60 seconds divided by tickets per minute
+               Thread.sleep(60000 / retrievalRate);
            }
            catch (InterruptedException e){
                Thread.currentThread().interrupt();
@@ -34,5 +39,21 @@ public class Customer implements Runnable {
 
    public int getTicketsPurchased() {
        return ticketsPurchased;
+   }
+
+   public String getName() {
+       return name;
+   }
+
+   public int getId() {
+       return id;
+   }
+
+   public String getEmail() {
+       return email;
+   }
+
+   public int getRetrievalRate() {
+       return retrievalRate;
    }
 }

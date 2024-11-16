@@ -2,13 +2,17 @@ package org.example;
 
 
 public class Vendor implements Runnable {
+    private final String name;
+    private final String id;
+    private final String email;
     private final TicketPool ticketPool;
     private final int releaseRate;
-    private final int vendorId;
     private int ticketsReleased;
 
-    public Vendor(int vendorId , TicketPool ticketPool , int releaseRate) {
-        this.vendorId = vendorId;
+    public Vendor(String name, String id, String email, TicketPool ticketPool, int releaseRate) {
+        this.name = name;
+        this.id = id;
+        this.email = email;
         this.ticketPool = ticketPool;
         this.releaseRate = releaseRate;
         this.ticketsReleased = 0;
@@ -21,8 +25,9 @@ public class Vendor implements Runnable {
             try{
                 if(ticketPool.addTicket(ticketsReleased + 1)){
                     ticketsReleased++;
-                    System.out.println("vendor " + vendorId + " released ticket   " + ticketsReleased);
-                    Thread.sleep(1000 / releaseRate);
+                    System.out.println("vendor " + name + " released ticket   " + ticketsReleased);
+                    // Adjust sleep time: 60 seconds divided by tickets per minute
+                    Thread.sleep(60000 / releaseRate);
                 }
                 else{
                     break;
@@ -38,5 +43,21 @@ public class Vendor implements Runnable {
 
     public int getTicketsReleased() {
         return ticketsReleased;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public int getReleaseRate() {
+        return releaseRate;
     }
 }

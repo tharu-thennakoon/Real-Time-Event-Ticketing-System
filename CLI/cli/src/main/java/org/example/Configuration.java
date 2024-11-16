@@ -19,11 +19,11 @@ public class Configuration {
         this.maxTicketCapacity = 50;
     }
 
-    public void setConfiguration(int totalTickets, int ticketReleaseRate,
-                                 int customerRetrievalRate, int maxTicketCapacity) {
+    public void setConfiguration(int totalTickets, int ticketReleaseRatePerMinute,
+                                 int customerRetrievalRatePerMinute, int maxTicketCapacity) {
         this.totalTickets = totalTickets;
-        this.ticketReleaseRate = ticketReleaseRate;
-        this.customerRetrievalRate = customerRetrievalRate;
+        this.ticketReleaseRate = ticketReleaseRatePerMinute;
+        this.customerRetrievalRate = customerRetrievalRatePerMinute;
         this.maxTicketCapacity = maxTicketCapacity;
     }
 
