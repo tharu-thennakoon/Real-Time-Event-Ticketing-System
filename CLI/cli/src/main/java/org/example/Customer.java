@@ -3,13 +3,13 @@ package org.example;
 
 public class Customer implements Runnable {
    private final String name;
-   private final int id;
+   private final String id;
    private final String email;
    private final TicketPool ticketPool;
    private final int retrievalRate;
    private int ticketsPurchased;
 
-   public Customer(String name, int id, String email, TicketPool ticketPool, int retrievalRate) {
+   public Customer(String name, String id, String email, TicketPool ticketPool, int retrievalRate) {
        this.name = name;
        this.id = id;
        this.email = email;
@@ -28,7 +28,7 @@ public class Customer implements Runnable {
                    System.out.println("Customer " + name + " (ID: " + id + ") purchased ticket " + ticket);
                }
                // Adjust sleep time: 60 seconds divided by tickets per minute
-               Thread.sleep(60000 / retrievalRate);
+               Thread.sleep(20000 );
            }
            catch (InterruptedException e){
                Thread.currentThread().interrupt();
@@ -45,7 +45,7 @@ public class Customer implements Runnable {
        return name;
    }
 
-   public int getId() {
+   public String getId() {
        return id;
    }
 

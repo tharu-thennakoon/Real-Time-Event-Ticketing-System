@@ -13,10 +13,10 @@ public class Configuration {
     private int maxTicketCapacity;
 
     public Configuration() {
-        this.totalTickets = 100;
-        this.ticketReleaseRate = 2;
-        this.customerRetrievalRate = 3;
-        this.maxTicketCapacity = 50;
+        this.totalTickets = 1000;
+        this.ticketReleaseRate = 100;
+        this.customerRetrievalRate = 100;
+        this.maxTicketCapacity = 2000;
     }
 
     public void setConfiguration(int totalTickets, int ticketReleaseRatePerMinute,

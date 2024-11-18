@@ -1,4 +1,7 @@
 package org.example;
+
+import java.util.HashSet;
+import java.util.Set;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -11,6 +14,8 @@ public class TicketingSystem {
     private List<Customer> customers;
     private boolean isRunning;
 
+    private  Set<String> useIds;
+
     public TicketingSystem( Configuration config) {
         this.config = config;
         this.vendorThreads = new ArrayList<>();
@@ -18,6 +23,7 @@ public class TicketingSystem {
         this.vendors = new ArrayList<>();
         this.customers = new ArrayList<>();
         this.isRunning = false;
+        this.useIds = new HashSet<>();
     }
 
     public void start() {
@@ -30,19 +36,42 @@ public class TicketingSystem {
         isRunning = true;
 
         for (int i=0; i <3; i++){
-            Vendor vendor = new Vendor(i + 1 , ticketPool, config.getTicketReleaseRate());
+            String vendorName = "vendor" + (i + 1);
+            String vendorID = "v" + (i + 1);
+
+            if (useIds.contains(vendorID)){
+                System.out.println("Error: vendor ID "+ vendorID +" is already in used!");
+                continue;
+            }
+            String vendorEmail = vendorName.toLowerCase() + "@gmail.com";
+            Vendor vendor = new Vendor(vendorName, vendorID, vendorEmail,ticketPool,config.getTicketReleaseRate());
             vendors.add(vendor);
-            Thread vendorthread = new Thread(vendor);
-            vendorThreads.add(vendorthread);
-            vendorthread.start();
+            useIds.add(vendorID);
+
+            System.out.println("Added " + vendorName + " with ID " + vendorID);
+            Thread vendorThread = new Thread(vendor);
+            vendorThreads.add(vendorThread);
+            vendorThread.start();
         }
 
         for (int i = 0; i < 5; i++){
-            Customer customer = new Customer(i + 1 , ticketPool, config.getTicketReleaseRate());
+            String customerName = "customer" + (i + 1);
+            String customerID = "c" + (i + 1);
+
+            if (useIds.contains(customerID)){
+                System.out.println("Error: customer ID "+ customerID +" is already in used!");
+                continue;
+            }
+
+            String customerEmail = customerName.toLowerCase() + "@gmail.com";
+            Customer customer = new Customer(customerName, customerID, customerEmail,ticketPool,config.getTicketReleaseRate());
             customers.add(customer);
-            Thread customerthread = new Thread(customer);
-            customerThreads.add(customerthread);
-            customerthread.start();
+            useIds.add(customerID);
+
+            System.out.println("Added " + customerName + " with ID " + customerID);
+            Thread customerThread = new Thread(customer);
+            customerThreads.add(customerThread);
+            customerThread.start();
         }
     }
 

@@ -9,20 +9,20 @@ import java.util.concurrent.TimeUnit;
 public class TicketPool {
     private final BlockingQueue<Integer> tickets;
     private final int maxCapacity;
-    private int totalTicketsTarget;
+    private int totalTickets;
     private  int totalTicketsProcessed;
     private volatile boolean isRunning;
 
-    public TicketPool(int maxCapacity, int totalTicket) {
+    public TicketPool( int totalTicket, int maxCapacity) {
         this.tickets = new LinkedBlockingQueue<>(maxCapacity);
         this.maxCapacity = maxCapacity;
-        this.totalTicketsTarget = totalTicket;
+        this.totalTickets = totalTicket;
         this.totalTicketsProcessed = 0;
         this.isRunning = true;
     }
 
     public synchronized boolean addTicket(int ticketId) {
-        if (!isRunning || totalTicketsProcessed >= totalTicketsTarget){
+        if (!isRunning || totalTicketsProcessed >= totalTickets){
             return false;
         }
         try {
@@ -45,6 +45,8 @@ public class TicketPool {
             return null;
         }
     }
+
+
 
     public void stop(){
         isRunning = false;

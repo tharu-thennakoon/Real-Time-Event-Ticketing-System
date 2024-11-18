@@ -27,7 +27,7 @@ public class Vendor implements Runnable {
                     ticketsReleased++;
                     System.out.println("vendor " + name + " released ticket   " + ticketsReleased);
                     // Adjust sleep time: 60 seconds divided by tickets per minute
-                    Thread.sleep(60000 / releaseRate);
+                    Thread.sleep(20000 );
                 }
                 else{
                     break;
