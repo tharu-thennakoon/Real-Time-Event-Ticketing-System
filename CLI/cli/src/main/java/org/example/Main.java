@@ -1,12 +1,14 @@
 package org.example;
 
-import java.util.*;
 
+
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         Configuration config = new Configuration();
         TicketPool ticketPool = new TicketPool(100);
+        TicketingSystem ticketingSystem = new TicketingSystem(ticketPool);
         Scanner scanner = new Scanner(System.in);
         String choice;
 
@@ -20,56 +22,45 @@ public class Main {
             System.out.println("5. Save Current Configuration to File");
             System.out.println("6. Load Current Configuration from File");
             System.out.println("7. Reset System Configuration");
-            System.out.println("8. Help");
-            System.out.println("9. Exit");
+            System.out.println("8. Exit");
             System.out.print("Enter your choice: ");
 
             if (!scanner.hasNextInt()) {
-                System.out.println("Invalid input! Please enter a number between 1 and 9.");
+                System.out.println("Invalid input! Please enter a number between 1 and 8.");
                 scanner.next();
                 continue;
             }
 
-            int choice = scanner.nextInt();
+            choice = scanner.nextLine();
 
             switch (choice) {
-                case 1:
+                case "1":
                     config.setConfiguration();
                     break;
-                case 2:
+                case "2":
                     ticketingSystem.startSystem(2, 3, config.getTicketReleaseRate(), config.getCustomerRetrievalRate());
                     break;
-                case 3:
-                    ticketingSystem.stopStop();
+                case "3":
+                    ticketingSystem.stopSystem();
                     break;
-                case 4:
+                case "4":
                     System.out.println("Current Tickets in Pool: " + ticketPool.getCurrentTicketCount());
                     break;
-                case 5:
-                    saveConfigurationToFile(Scanner, config);
+                case "5":
+                    config.saveConfiguration("config.txt"); // Save configuration to default file
                     break;
-                case 6:
-                    loadConfigurationFromFile(Scanner, config);
+                case "6":
+                    config.loadConfiguration("config.txt"); // Load configuration from default file
                     break;
-                case 7:
+                case "7":
                     config.setConfiguration();
                     break;
-                case 8:
+                case "8":
                     System.out.println("Exiting the system. Goodbye!");
                     return;
                 default:
                     System.out.println("Invalid input! Please enter a valid choice.");
-
             }
         }
     }
-
-    private static void saveConfigurationToFile(Scanner scanner, Configuration config) {
-        config.saveConfiguration();
-    }
-
-    private static void loadConfigurationFromFile(Scanner scanner, Configuration config) {
-        config.loadConfiguration();
-    }
-
 }

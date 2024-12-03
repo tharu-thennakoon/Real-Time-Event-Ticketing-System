@@ -1,10 +1,7 @@
 package org.example;
 
-
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Properties;
+import java.io.*;
+import java.util.Scanner;
 
 public class Configuration {
     private int totalTickets;
@@ -12,44 +9,84 @@ public class Configuration {
     private int customerRetrievalRate;
     private int maxTicketCapacity;
 
-    public Configuration() {
-        this.totalTickets = 1000;
-        this.ticketReleaseRate = 100;
-        this.customerRetrievalRate = 100;
-        this.maxTicketCapacity = 2000;
-    }
+    public void setConfiguration() {
+        Scanner scanner = new Scanner(System.in);
+        try {
+            System.out.print("Enter Total Tickets: ");
+            totalTickets = validateInput(scanner.nextInt());
 
-    public void setConfiguration(int totalTickets, int ticketReleaseRatePerMinute,
-                                 int customerRetrievalRatePerMinute, int maxTicketCapacity) {
-        this.totalTickets = totalTickets;
-        this.ticketReleaseRate = ticketReleaseRatePerMinute;
-        this.customerRetrievalRate = customerRetrievalRatePerMinute;
-        this.maxTicketCapacity = maxTicketCapacity;
-    }
+            System.out.print("Enter Ticket Release Rate: ");
+            ticketReleaseRate = validateInput(scanner.nextInt());
 
-    public void saveToFile() throws IOException {
-        Properties props = new Properties();
-        props.setProperty("totalTickets", String.valueOf(totalTickets));
-        props.setProperty("ticketReleaseRate", String.valueOf(ticketReleaseRate));
-        props.setProperty("customerRetrievalRate", String.valueOf(customerRetrievalRate));
-        props.setProperty("maxTicketCapacity", String.valueOf(maxTicketCapacity));
+            System.out.print("Enter Customer Retrieval Rate: ");
+            customerRetrievalRate = validateInput(scanner.nextInt());
 
-        try(FileWriter writter = new FileWriter("ticketingSystem.txt")) {
-            props.store(writter, "Ticketing System Configuration");
+            System.out.print("Enter Maximum Ticket Capacity: ");
+            maxTicketCapacity = validateInput(scanner.nextInt());
 
+            if (totalTickets > maxTicketCapacity) {
+                throw new IllegalArgumentException("Total tickets cannot exceed maximum ticket capacity.");
+            }
+
+            System.out.println("Configuration set successfully!");
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
         }
     }
 
-    public void loadFromFile() throws IOException {
-        Properties props = new Properties();
-        try(FileReader reader = new FileReader("ticketingSystem.txt")){
-            props.load(reader);
-            totalTickets = Integer.parseInt(props.getProperty("totalTickets"));
-            ticketReleaseRate = Integer.parseInt(props.getProperty("ticketReleaseRate"));
-            customerRetrievalRate = Integer.parseInt(props.getProperty("customerRetrievalRate"));
-            maxTicketCapacity = Integer.parseInt(props.getProperty("maxTicketCapacity"));
+    public void viewConfiguration() {
+        System.out.println("\n=== Current Configuration ===");
+        System.out.println("Total Tickets: " + totalTickets);
+        System.out.println("Ticket Release Rate: " + ticketReleaseRate);
+        System.out.println("Customer Retrieval Rate: " + customerRetrievalRate);
+        System.out.println("Maximum Ticket Capacity: " + maxTicketCapacity);
+    }
 
+    // Save configuration to a text file
+    public void saveConfiguration(String fileName) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            writer.write("Total Tickets: " + totalTickets + "\n");
+            writer.write("Ticket Release Rate: " + ticketReleaseRate + "\n");
+            writer.write("Customer Retrieval Rate: " + customerRetrievalRate + "\n");
+            writer.write("Maximum Ticket Capacity: " + maxTicketCapacity + "\n");
+            System.out.println("Configuration saved to " + fileName);
+        } catch (IOException e) {
+            System.out.println("Error saving configuration to file: " + e.getMessage());
         }
+    }
+
+    // Load configuration from a text file
+    public void loadConfiguration(String fileName) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(": ");
+                switch (parts[0].trim()) {
+                    case "Total Tickets":
+                        totalTickets = Integer.parseInt(parts[1]);
+                        break;
+                    case "Ticket Release Rate":
+                        ticketReleaseRate = Integer.parseInt(parts[1]);
+                        break;
+                    case "Customer Retrieval Rate":
+                        customerRetrievalRate = Integer.parseInt(parts[1]);
+                        break;
+                    case "Maximum Ticket Capacity":
+                        maxTicketCapacity = Integer.parseInt(parts[1]);
+                        break;
+                }
+            }
+            System.out.println("Configuration loaded from " + fileName);
+        } catch (IOException e) {
+            System.out.println("Error loading configuration from file: " + e.getMessage());
+        }
+    }
+
+    private int validateInput(int value) {
+        if (value <= 0) {
+            throw new IllegalArgumentException("Value must be positive.");
+        }
+        return value;
     }
 
     public int getTotalTickets() {
@@ -67,5 +104,5 @@ public class Configuration {
     public int getMaxTicketCapacity() {
         return maxTicketCapacity;
     }
-
 }
+

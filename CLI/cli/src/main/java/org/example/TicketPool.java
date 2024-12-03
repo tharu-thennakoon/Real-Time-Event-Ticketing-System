@@ -1,67 +1,49 @@
 package org.example;
 
-
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
-
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class TicketPool {
-    private final BlockingQueue<Integer> tickets;
+    private final Queue<Integer>  tickets = new LinkedList<>();
     private final int maxCapacity;
-    private int totalTickets;
-    private  int totalTicketsProcessed;
-    private volatile boolean isRunning;
 
-    public TicketPool( int totalTicket, int maxCapacity) {
-        this.tickets = new LinkedBlockingQueue<>(maxCapacity);
+    public TicketPool(int maxCapacity) {
         this.maxCapacity = maxCapacity;
-        this.totalTickets = totalTicket;
-        this.totalTicketsProcessed = 0;
-        this.isRunning = true;
     }
 
-    public synchronized boolean addTicket(int ticketId) {
-        if (!isRunning || totalTicketsProcessed >= totalTickets){
-            return false;
+    public synchronized void addTickets(int count) {
+        while (tickets.size() + count > maxCapacity) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
         }
-        try {
-            tickets.put(ticketId);
-            totalTicketsProcessed++;
-            return true;
+
+        for (int i=0; i < count; i++) {
+            tickets.add(1);
         }
-        catch (InterruptedException e){
-            Thread.currentThread().interrupt();
-            return false;
-        }
+
+        System.out.println(count + " tickets added to the pool.");
+        notifyAll();
     }
 
-    public Integer removeTicket() {
-        try{
-            return isRunning ? tickets.poll(1, TimeUnit.SECONDS) : null;
+    public synchronized void removeTickets(int count) {
+        while (tickets.size() < count) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
         }
-        catch (InterruptedException e){
-            Thread.currentThread().interrupt();
-            return null;
+        for (int i = 0; i < count; i++) {
+            tickets.poll();
         }
+        System.out.println(count + " tickets removed from the pool.");
+        notifyAll();
     }
 
-
-
-    public void stop(){
-        isRunning = false;
-    }
-
-    public int getAvailableTickets(){
+    public synchronized int getCurrentTicketCount() {
         return tickets.size();
     }
-
-    public int getTotalTicketsProcessed(){
-        return totalTicketsProcessed;
-    }
-
-    public boolean isRunning(){
-        return isRunning;
-    }
-
 }
