@@ -5,16 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d2cfaefa-18ac-48b6-b238-4ee802b74fef" name="Changes" comment="Create Spring Boot Project">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CLI/cli/src/main/java/org/example/Customer.java" beforeDir="false" afterPath="$PROJECT_DIR$/../CLI/cli/src/main/java/org/example/Customer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CLI/cli/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../CLI/cli/src/main/java/org/example/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CLI/cli/src/main/java/org/example/TicketPool.java" beforeDir="false" afterPath="$PROJECT_DIR$/../CLI/cli/src/main/java/org/example/TicketPool.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CLI/cli/src/main/java/org/example/TicketingSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/../CLI/cli/src/main/java/org/example/TicketingSystem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CLI/out/production/cli/org/example/TicketPool.class" beforeDir="false" afterPath="$PROJECT_DIR$/../CLI/out/production/cli/org/example/TicketPool.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CLI/out/production/cli/org/example/TicketingSystem.class" beforeDir="false" afterPath="$PROJECT_DIR$/../CLI/out/production/cli/org/example/TicketingSystem.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,7 +48,7 @@
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;jdk.selected.JAVA_MODULE&quot;: &quot;22&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/IIT/level 5/oop/course work final/Backend&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/IIT/level 5/oop/course work final&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -96,6 +88,9 @@
       <workItem from="1731820125715" duration="37000" />
       <workItem from="1731820180369" duration="12000" />
       <workItem from="1731820224076" duration="7000" />
+      <workItem from="1733241751319" duration="510000" />
+      <workItem from="1733242285080" duration="25000" />
+      <workItem from="1733256193273" duration="12000" />
     </task>
     <task id="LOCAL-00001" summary="Create Spring Boot Project">
       <option name="closed" value="true" />
