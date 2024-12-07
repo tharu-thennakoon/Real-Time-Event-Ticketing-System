@@ -1,23 +1,39 @@
 package org.example;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class Vendor implements Runnable {
     private final TicketPool ticketPool;
     private final int ticketReleaseRate;
+    private final int maxTickets;
 
-    public Vendor(TicketPool ticketPool, int ticketReleaseRate) {
+    public Vendor(TicketPool ticketPool, int ticketReleaseRate, int maxTickets) {
         this.ticketPool = ticketPool;
         this.ticketReleaseRate = ticketReleaseRate;
+        this.maxTickets = maxTickets;
     }
 
     @Override
     public void run() {
-        while (!Thread.currentThread().isInterrupted()) {
-            ticketPool.addTickets(ticketReleaseRate);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        try {
+            while (!Thread.currentThread().isInterrupted()) {
+                synchronized (ticketPool) {
+                    if (ticketPool.getTotalTicketsIssued() >= maxTickets) {
+                        System.out.println(LocalDateTime.now().format(formatter) + " - " + Thread.currentThread().getName() + " has stopped. All tickets issued.");
+                        return; // Stop thread when max tickets are issued
+                    }
+                }
+                ticketPool.addTickets(1);
+                System.out.println(LocalDateTime.now().format(formatter) + " - " + Thread.currentThread().getName() + " added a ticket.");
+                Thread.sleep(ticketReleaseRate * 1000); // Simulate ticket release delay
             }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            System.out.println("Vendor thread interrupted: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("An error occurred in Vendor thread: " + e.getMessage());
         }
     }
 }

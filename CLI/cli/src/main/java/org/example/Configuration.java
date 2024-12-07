@@ -1,5 +1,6 @@
 package org.example;
 
+import com.google.gson.Gson;
 import java.io.*;
 import java.util.Scanner;
 
@@ -8,87 +9,88 @@ public class Configuration {
     private int ticketReleaseRate;
     private int customerRetrievalRate;
     private int maxTicketCapacity;
+    private int numberOfVendors;
 
+    // Method to configure the system
     public void setConfiguration() {
         Scanner scanner = new Scanner(System.in);
         try {
             System.out.print("Enter Total Tickets: ");
-            totalTickets = validateInput(scanner.nextInt());
+            totalTickets = validatePositiveInput(scanner.nextInt());
 
             System.out.print("Enter Ticket Release Rate: ");
-            ticketReleaseRate = validateInput(scanner.nextInt());
+            ticketReleaseRate = validatePositiveInput(scanner.nextInt());
 
             System.out.print("Enter Customer Retrieval Rate: ");
-            customerRetrievalRate = validateInput(scanner.nextInt());
+            customerRetrievalRate = validatePositiveInput(scanner.nextInt());
 
             System.out.print("Enter Maximum Ticket Capacity: ");
-            maxTicketCapacity = validateInput(scanner.nextInt());
+            maxTicketCapacity = validatePositiveInput(scanner.nextInt());
 
             if (totalTickets > maxTicketCapacity) {
                 throw new IllegalArgumentException("Total tickets cannot exceed maximum ticket capacity.");
             }
 
+            System.out.print("Enter Number of Vendors: ");
+            numberOfVendors = validatePositiveInput(scanner.nextInt());
+
             System.out.println("Configuration set successfully!");
-        } catch (Exception e) {
+            saveConfiguration("config.json");
+            System.out.println("Configuration saved to 'config.json'.");
+
+        } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
         }
     }
 
+    // Validate input to ensure it's a positive number
+    private int validatePositiveInput(int value) {
+        if (value <= 0) {
+            throw new IllegalArgumentException("Value must be a positive number.");
+        }
+        return value;
+    }
+
+    // View the current configuration
     public void viewConfiguration() {
         System.out.println("\n=== Current Configuration ===");
         System.out.println("Total Tickets: " + totalTickets);
         System.out.println("Ticket Release Rate: " + ticketReleaseRate);
         System.out.println("Customer Retrieval Rate: " + customerRetrievalRate);
         System.out.println("Maximum Ticket Capacity: " + maxTicketCapacity);
+        System.out.println("Number of Vendors: " + numberOfVendors);
     }
 
-    // Save configuration to a text file
+    // Save configuration to a JSON file using Gson
     public void saveConfiguration(String fileName) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
-            writer.write("Total Tickets: " + totalTickets + "\n");
-            writer.write("Ticket Release Rate: " + ticketReleaseRate + "\n");
-            writer.write("Customer Retrieval Rate: " + customerRetrievalRate + "\n");
-            writer.write("Maximum Ticket Capacity: " + maxTicketCapacity + "\n");
-            System.out.println("Configuration saved to " + fileName);
+        Gson gson = new Gson();
+        try (Writer writer = new FileWriter(fileName)) {
+            gson.toJson(this, writer);
         } catch (IOException e) {
-            System.out.println("Error saving configuration to file: " + e.getMessage());
+            System.out.println("Error saving configuration: " + e.getMessage());
         }
     }
 
-    // Load configuration from a text file
-    public void loadConfiguration(String fileName) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(": ");
-                switch (parts[0].trim()) {
-                    case "Total Tickets":
-                        totalTickets = Integer.parseInt(parts[1]);
-                        break;
-                    case "Ticket Release Rate":
-                        ticketReleaseRate = Integer.parseInt(parts[1]);
-                        break;
-                    case "Customer Retrieval Rate":
-                        customerRetrievalRate = Integer.parseInt(parts[1]);
-                        break;
-                    case "Maximum Ticket Capacity":
-                        maxTicketCapacity = Integer.parseInt(parts[1]);
-                        break;
-                }
-            }
-            System.out.println("Configuration loaded from " + fileName);
+    // Load configuration from a JSON file using Gson
+    public boolean loadConfiguration(String fileName) {
+        Gson gson = new Gson();
+        try (Reader reader = new FileReader(fileName)) {
+            Configuration config = gson.fromJson(reader, Configuration.class);
+            this.totalTickets = config.totalTickets;
+            this.ticketReleaseRate = config.ticketReleaseRate;
+            this.customerRetrievalRate = config.customerRetrievalRate;
+            this.maxTicketCapacity = config.maxTicketCapacity;
+            this.numberOfVendors = config.numberOfVendors;
+            return true; // Successfully loaded
         } catch (IOException e) {
-            System.out.println("Error loading configuration from file: " + e.getMessage());
+            System.out.println("Error loading configuration: " + e.getMessage());
+            return false; // Loading failed
         }
     }
 
-    private int validateInput(int value) {
-        if (value <= 0) {
-            throw new IllegalArgumentException("Value must be positive.");
-        }
-        return value;
-    }
-
+    // Getters for configuration values
     public int getTotalTickets() {
         return totalTickets;
     }
@@ -104,5 +106,8 @@ public class Configuration {
     public int getMaxTicketCapacity() {
         return maxTicketCapacity;
     }
-}
 
+    public int getNumberOfVendors() {
+        return numberOfVendors;
+    }
+}
