@@ -1,6 +1,6 @@
-// src/components/ControlPanel.js
+// src/components/ControlPanel.jsx
 import React from 'react';
-import './controlPanel.css';
+import './ControlPanel.css';
 
 function ControlPanel() {
   const startSystem = () => {
@@ -17,9 +17,15 @@ function ControlPanel() {
 
   return (
     <div className="control-panel">
-      <button onClick={startSystem}>Start</button>
-      <button onClick={stopSystem}>Stop</button>
-      <button onClick={resetSystem}>Reset</button>
+      <button onClick={startSystem} className="control-button start-button">
+        Start
+      </button>
+      <button onClick={stopSystem} className="control-button stop-button">
+        Stop
+      </button>
+      <button onClick={resetSystem} className="control-button reset-button">
+        Reset
+      </button>
     </div>
   );
 }

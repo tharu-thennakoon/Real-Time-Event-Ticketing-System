@@ -7,6 +7,7 @@ function ConfigurationForm({ onSubmit }) {
   const [ticketReleaseRate, setTicketReleaseRate] = useState(0);
   const [customerRetrievalRate, setCustomerRetrievalRate] = useState(0);
   const [maxTicketCapacity, setMaxTicketCapacity] = useState(0);
+  const [numberOfVendors, setNumberOfVendors] = useState(0);  // New state for vendors
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -17,6 +18,7 @@ function ConfigurationForm({ onSubmit }) {
       ticketReleaseRate,
       customerRetrievalRate,
       maxTicketCapacity,
+      numberOfVendors, // Include vendors in the config object
     };
     onSubmit(config);
   };
@@ -69,6 +71,18 @@ function ConfigurationForm({ onSubmit }) {
           value={maxTicketCapacity}
           onChange={(e) => setMaxTicketCapacity(e.target.value)}
           min="0"
+          required
+        />
+      </label>
+
+      {/* How Many Vendors */}
+      <label>
+        Add Many Vendors:
+        <input
+          type="number"
+          value={numberOfVendors}
+          onChange={(e) => setNumberOfVendors(e.target.value)}
+          min="1" // At least 1 vendor
           required
         />
       </label>

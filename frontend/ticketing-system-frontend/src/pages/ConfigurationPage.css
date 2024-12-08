@@ -1,0 +1,83 @@
+/* src/pages/ConfigurationPage.css */
+.configuration-page {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa; /* Soft light background */
+    min-height: 100vh; /* Full-page height */
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .configuration-page h1 {
+    font-size: 2.5rem;
+    color: #343a40;
+    margin-bottom: 30px;
+    text-align: center;
+    font-weight: 600;
+  }
+  
+  /* Container for Configuration Form */
+  .configuration-form-container {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+  }
+  
+  /* Center the form on page */
+  .configuration-form-container .config-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  /* Styling the submit button container */
+  .configuration-form-container button {
+    padding: 12px 25px;
+    font-size: 1.2rem;
+    background-color: #007bff;
+    color: white;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .configuration-form-container button:hover {
+    background-color: #0056b3;
+    transform: translateY(-3px); /* Lift effect */
+  }
+  
+  .configuration-form-container .control-button {
+    background-color: #6c757d;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .configuration-form-container .control-button:hover {
+    background-color: #5a6268;
+  }
+  
+  @media (max-width: 768px) {
+    /* For smaller screens, make sure the form doesn't take too much space */
+    .configuration-form-container {
+      padding: 20px;
+      width: 100%;
+      max-width: 100%;
+    }
+  
+    .configuration-page h1 {
+      font-size: 2rem;
+    }
+  }
+  
