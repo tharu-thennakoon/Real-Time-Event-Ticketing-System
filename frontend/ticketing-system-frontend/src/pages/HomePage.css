@@ -118,3 +118,54 @@
 .control-panel button:hover {
   opacity: 0.9;
 }
+
+/* src/pages/HomePage.css */
+
+/* Navigation Bar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background-color: #007bff;
+  color: white;
+}
+
+.navbar h1 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.navbar-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.nav-button {
+  padding: 10px 15px;
+  color: white;
+  background-color: #0056b3;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+}
+
+.nav-button:hover {
+  background-color: #004099;
+}
+
+/* Page Content */
+.home-page .content {
+  margin-top: 30px;
+  padding: 20px;
+  text-align: center;
+}
+
+.auth-section {
+  margin-top: 20px;
+}
+
+.dashboard-content {
+  margin-top: 20px;
+}

@@ -1,68 +1,31 @@
 // src/pages/HomePage.js
-import React, { useState } from 'react';
-import LoginForm from '../components/LoginForm';
-import SignUpForm from '../components/SignUpForm';
-import TicketStatus from '../components/TicketStatus';
-import ControlPanel from '../components/ControlPanel';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import './HomePage.css';
-import LogDisplay from '../components/LogDisplay';
 
-function HomePage() { // Correct function name matches file name
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login state
-  const [showSignUp, setShowSignUp] = useState(false); // Toggle between Login and Signup forms
-
-  // Handle login
-  const handleLogin = (email, password) => {
-    console.log('User logged in:', email);
-    setIsLoggedIn(true); // Simulate successful login
-  };
-
-  // Handle signup
-  const handleSignUp = (email, password) => {
-    console.log('User signed up:', email);
-    setIsLoggedIn(true); // Simulate successful signup
-  };
-
+function HomePage() {
   return (
-    <div className="dashboard-page">
-      <h1>Welcome to Real-Time Event Ticketing System</h1>
-
-      {/* Show Login/Signup Forms if not logged in */}
-      {!isLoggedIn ? (
-        <div className="auth-section">
-          {showSignUp ? (
-            <>
-              <SignUpForm onSignUp={handleSignUp} />
-              <p>
-                Already have an account?{' '}
-                <button onClick={() => setShowSignUp(false)} className="link-button">
-                  Login here
-                </button>
-              </p>
-            </>
-          ) : (
-            <>
-              <LoginForm onLogin={handleLogin} />
-              <p>
-                Don't have an account?{' '}
-                <button onClick={() => setShowSignUp(true)} className="link-button">
-                  Sign up here
-                </button>
-              </p>
-            </>
-          )}
+    <div className="home-page">
+      {/* Navigation Bar */}
+      <nav className="navbar">
+        <h1>Event Ticketing System</h1>
+        <div className="navbar-buttons">
+          <Link to="/login" className="nav-button">
+            Log In
+          </Link>
+          <Link to="/signup" className="nav-button">
+            Sign Up
+          </Link>
         </div>
-      ) : (
-        // Show dashboard content if logged in
-        <div className="dashboard-content">
-          <TicketStatus />
-          <ControlPanel />
-        </div>
-      )}
+      </nav>
 
-      <LogDisplay/>
+      {/* Page Heading */}
+      <div className="content">
+        <h1>Welcome to Real-Time Event Ticketing System</h1>
+        <p>Your one-stop solution for managing ticketing events effortlessly!</p>
+      </div>
     </div>
   );
 }
 
-export default HomePage; // Correct export matches component name
+export default HomePage;
