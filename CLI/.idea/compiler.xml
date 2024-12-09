@@ -9,5 +9,8 @@
         <module name="cli" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="cli" target="22" />
+    </bytecodeTargetLevel>
   </component>
 </project>

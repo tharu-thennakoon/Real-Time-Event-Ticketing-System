@@ -1,14 +1,13 @@
 package com.oopcw.backend.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
+import lombok.*;
+
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public class UserDTO {
-    private int id;
+    private Long id;
     private String name;
-    private String address;
+    private String email;
 }

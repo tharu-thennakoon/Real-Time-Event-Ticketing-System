@@ -1,6 +1,6 @@
 // src/components/ControlPanel.jsx
 import React from 'react';
-import './ControlPanel.css';
+import './controlPanel.css';
 
 function ControlPanel() {
   const startSystem = () => {

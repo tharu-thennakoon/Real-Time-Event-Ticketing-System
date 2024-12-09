@@ -1,45 +1,57 @@
 package com.oopcw.backend.controller;
 
-import com.oopcw.backend.dto.UserDTO;  // Import your DTO class
+import com.oopcw.backend.entity.User;
 import com.oopcw.backend.service.UserService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "api/v1/user")
-@CrossOrigin
+@RequestMapping("/api/users")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @GetMapping("/getUsers")
-    public List<UserDTO> getUser() {  // Parameterized List with UserDTO
-        return userService.getAllUsers();
+    // **GET**: Retrieve all users
+    @GetMapping
+    public List<User> getAllUsers() {
+        return userService.findAllUsers();
     }
 
-    @PostMapping("/saveUser")
-    public UserDTO saveUser(@RequestBody UserDTO userDTO) {  // Specify parameter type and annotate with @RequestBody
-        return userService.saveUser(userDTO);
+    // **GET**: Retrieve a user by ID
+    @GetMapping("/{id}")
+    public Optional<User> getUserById(@PathVariable Long id) {
+        return userService.findUserById(id);
     }
 
-    @PutMapping("/updateUser")
-    public UserDTO putUser(@RequestBody UserDTO userDTO) {
-        return userService.updateUser(userDTO);
+    // **POST**: Create a new user
+    @PostMapping
+    public User createUser(@Valid @RequestBody User user) {
+        return userService.saveUser(user);
     }
 
-    @DeleteMapping("/deleteUser")
-    public Boolean deleteUser(@RequestBody UserDTO userDTO) {
-        return userService.deleteUser(userDTO);
+    // **PUT**: Update an existing user by ID
+    @PutMapping("/{id}")
+    public User updateUser(@PathVariable Long id, @Valid @RequestBody User updatedUser) {
+        Optional<User> existingUser = userService.findUserById(id);
+        if (existingUser.isPresent()) {
+            User user = existingUser.get();
+            user.setName(updatedUser.getName());
+            user.setEmail(updatedUser.getEmail());
+            user.setRole(updatedUser.getRole());
+            return userService.saveUser(user);
+        }
+        throw new RuntimeException("User not found!");
+    }
+
+    // **DELETE**: Delete a user by ID
+    @DeleteMapping("/{id}")
+    public String deleteUser(@PathVariable Long id) {
+        boolean isDeleted = userService.deleteUser(id);
+        return isDeleted ? "User deleted successfully!" : "User not found!";
     }
 }

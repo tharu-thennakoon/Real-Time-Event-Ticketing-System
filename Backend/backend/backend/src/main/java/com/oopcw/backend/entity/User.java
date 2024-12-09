@@ -1,22 +1,22 @@
 package com.oopcw.backend.entity;
 
-
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
+import lombok.*;
 
 @Entity
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public class User {
-
-    public static Object entity;
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String name;
-    private String address;
+
+    private String email;
+
+    @Pattern(regexp = "^(Consumer|Producer)$", message = "Role must be either 'Consumer' or 'Producer'")
+    private String role; // Restrict to "Consumer" or "Producer"
 }
