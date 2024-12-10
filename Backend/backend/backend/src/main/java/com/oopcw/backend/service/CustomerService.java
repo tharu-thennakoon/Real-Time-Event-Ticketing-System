@@ -13,6 +13,9 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Autowired
+    private TicketPoolService ticketPoolService; // Inject TicketPoolService
+
     public Customer createCustomer(Customer customer) {
         return customerRepository.save(customer);
     }
@@ -22,7 +25,7 @@ public class CustomerService {
     }
 
     public void startCustomerThread(Customer customer) {
-        Thread customerThread = new Thread(new CustomerServiceImpl(new TicketPoolService(100), customer.getRetrievalRate()));
+        Thread customerThread = new Thread(new CustomerServiceImpl(ticketPoolService, customer.getRetrievalRate()));
         customerThread.start();
         System.out.println("Customer thread started for customer: " + customer.getName());
     }

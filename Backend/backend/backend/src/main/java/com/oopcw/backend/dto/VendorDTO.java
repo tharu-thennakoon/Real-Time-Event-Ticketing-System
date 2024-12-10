@@ -1,12 +1,9 @@
 package com.oopcw.backend.dto;
 
-import lombok.*;
+import lombok.Data;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class VendorDTO {
-    private Long id;
     private String name;
-    private int ticketReleaseRate; // In milliseconds
+    private int ticketReleaseRate;
 }

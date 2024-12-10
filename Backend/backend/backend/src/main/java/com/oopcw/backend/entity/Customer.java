@@ -12,6 +12,6 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name; // Customer name
-    private int retrievalRate; // Time in milliseconds between ticket retrievals
+    private String name;
+    private int retrievalRate;
 }

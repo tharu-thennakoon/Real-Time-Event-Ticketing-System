@@ -1,12 +1,9 @@
 package com.oopcw.backend.dto;
 
-import lombok.*;
+import lombok.Data;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class CustomerDTO {
-    private Long id;
     private String name;
-    private int retrievalRate; // Time in seconds
+    private int retrievalRate;
 }

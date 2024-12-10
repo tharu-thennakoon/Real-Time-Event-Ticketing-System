@@ -12,6 +12,6 @@ public class Vendor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name; // Vendor name
-    private int ticketReleaseRate; // Time in milliseconds between ticket releases
+    private String name;
+    private int ticketReleaseRate;
 }

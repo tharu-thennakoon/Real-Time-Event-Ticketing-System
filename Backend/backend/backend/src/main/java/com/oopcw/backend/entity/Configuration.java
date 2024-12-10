@@ -1,12 +1,12 @@
 package com.oopcw.backend.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class Configuration {
 
     @Id
@@ -14,8 +14,8 @@ public class Configuration {
     private Long id;
 
     private int totalTickets;
-    private int ticketReleaseRate;  // In milliseconds
-    private int customerRetrievalRate; // In milliseconds
+    private int ticketReleaseRate;
+    private int customerRetrievalRate;
     private int maxTicketCapacity;
     private int numberOfVendors;
     private int numberOfCustomers;

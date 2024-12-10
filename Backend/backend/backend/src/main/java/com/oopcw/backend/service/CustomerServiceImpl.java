@@ -2,7 +2,7 @@ package com.oopcw.backend.service;
 
 public class CustomerServiceImpl implements Runnable {
     private final TicketPoolService ticketPool;
-    private final int retrievalRate; // In milliseconds
+    private final int retrievalRate;
 
     public CustomerServiceImpl(TicketPoolService ticketPool, int retrievalRate) {
         this.ticketPool = ticketPool;
