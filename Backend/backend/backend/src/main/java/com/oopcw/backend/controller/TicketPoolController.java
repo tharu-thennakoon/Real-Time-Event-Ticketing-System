@@ -20,9 +20,10 @@ public class TicketPoolController {
     private TicketPoolService ticketPoolService;
 
     // Start vendor and customer threads based on configurations
-    @PostMapping("/start-simulation/{configId}")
-    public String startSimulation(@PathVariable Long configId) {
-        Configuration config = configurationService.getConfiguration(configId)
+    @GetMapping("/start-simulation")
+    public String startSimulation() {
+        // Fetch the configuration, assuming we only have one configuration at a time.
+        Configuration config = configurationService.getLastConfiguration()
                 .orElseThrow(() -> new RuntimeException("Configuration not found"));
 
         // Reinitialize ticket pool service based on the configuration
@@ -43,10 +44,10 @@ public class TicketPoolController {
         return "Simulation started with " + config.getNumberOfVendors() + " vendors and " + config.getNumberOfCustomers() + " customers.";
     }
 
-    // Get the current configuration by ID
-    @GetMapping("/configuration/{id}")
-    public Configuration getConfiguration(@PathVariable Long id) {
-        return configurationService.getConfiguration(id)
+    // Get the current configuration
+    @GetMapping("/configuration")
+    public Configuration getConfiguration() {
+        return configurationService.getLastConfiguration()
                 .orElseThrow(() -> new RuntimeException("Configuration not found"));
     }
 
@@ -55,31 +56,6 @@ public class TicketPoolController {
     public Configuration saveConfiguration(@RequestBody Configuration configuration) {
         validateConfiguration(configuration);
         return configurationService.saveConfiguration(configuration);
-    }
-
-    // Update an existing configuration
-    @PutMapping("/configuration/{id}")
-    public Configuration updateConfiguration(@PathVariable Long id, @RequestBody Configuration configuration) {
-        validateConfiguration(configuration);
-        return configurationService.updateConfiguration(id, configuration);
-    }
-
-    // Delete a configuration by ID
-    @DeleteMapping("/configuration/{id}")
-    public String deleteConfiguration(@PathVariable Long id) {
-        return configurationService.deleteConfiguration(id) ? "Configuration deleted" : "Configuration not found";
-    }
-
-    // Get the current ticket pool size
-    @GetMapping("/current-size")
-    public int getCurrentPoolSize() {
-        return ticketPoolService.getCurrentTicketCount();
-    }
-
-    // Get the total tickets issued
-    @GetMapping("/total-issued")
-    public int getTotalTicketsIssued() {
-        return ticketPoolService.getTotalTicketsIssued();
     }
 
     // Validate the configuration object

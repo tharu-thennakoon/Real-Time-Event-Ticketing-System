@@ -5,6 +5,9 @@ import com.oopcw.backend.repository.ConfigurationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
 
 @Service
@@ -13,31 +16,50 @@ public class ConfigurationService {
     @Autowired
     private ConfigurationRepository configurationRepository;
 
-    // Save configuration
+    private final String configFilePath = "configurations.json";
+
+    // Save configuration and write to a JSON file
     public Configuration saveConfiguration(Configuration configuration) {
-        return configurationRepository.save(configuration);
+        Configuration savedConfig = configurationRepository.save(configuration);
+        writeConfigToFile(savedConfig);
+        return savedConfig;
     }
 
-    // Update configuration
+    // Update configuration and write to a JSON file
     public Configuration updateConfiguration(Long id, Configuration configuration) {
         if (configurationRepository.existsById(id)) {
             configuration.setId(id);
-            return configurationRepository.save(configuration);
+            Configuration updatedConfig = configurationRepository.save(configuration);
+            writeConfigToFile(updatedConfig);
+            return updatedConfig;
         }
         throw new RuntimeException("Configuration not found.");
     }
 
-    // Delete configuration
-    public boolean deleteConfiguration(Long id) {
-        if (configurationRepository.existsById(id)) {
-            configurationRepository.deleteById(id);
-            return true;
-        }
-        return false;
+    // Get the last configuration saved
+    public Optional<Configuration> getLastConfiguration() {
+        return configurationRepository.findAll().stream().findFirst();
     }
 
-    // Get the configuration by ID
-    public Optional<Configuration> getConfiguration(Long id) {
-        return configurationRepository.findById(id);
+    // Write configuration to a JSON file
+    private void writeConfigToFile(Configuration config) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.writeValue(new File(configFilePath), config);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error writing configuration to file");
+        }
+    }
+
+    // Load configuration from a JSON file
+    public Configuration loadConfigFromFile() {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            return objectMapper.readValue(new File(configFilePath), Configuration.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error loading configuration from file");
+        }
     }
 }
