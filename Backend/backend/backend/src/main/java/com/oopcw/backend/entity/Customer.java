@@ -7,11 +7,11 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Vendor {
+public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name; // Vendor name
-    private int ticketReleaseRate; // Time in milliseconds between ticket releases
+    private String name; // Customer name
+    private int retrievalRate; // Time in milliseconds between ticket retrievals
 }
