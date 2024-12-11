@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './LogDisplay.css';
 
 const LogDisplay = () => {
   const [logs] = useState([

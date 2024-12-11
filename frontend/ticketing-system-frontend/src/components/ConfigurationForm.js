@@ -1,7 +1,7 @@
-// ConfigurationForm.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import './configurationForm.css'
 
-const ConfigurationForm = ({ onSubmit }) => {
+const ConfigurationForm = ({ onSubmit, selectedConfig, onGoToDashboard }) => {
   const [config, setConfig] = useState({
     totalTickets: '',
     ticketReleaseRate: '',
@@ -11,14 +11,13 @@ const ConfigurationForm = ({ onSubmit }) => {
     numberOfCustomers: '',
   });
 
-  const [errors, setErrors] = useState({
-    totalTickets: '',
-    ticketReleaseRate: '',
-    customerRetrievalRate: '',
-    maxTicketCapacity: '',
-    numberOfVendors: '',
-    numberOfCustomers: '',
-  });
+  const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    if (selectedConfig) {
+      setConfig(selectedConfig);
+    }
+  }, [selectedConfig]);
 
   const handleChange = (e) => {
     setConfig({ ...config, [e.target.name]: e.target.value });
@@ -29,30 +28,12 @@ const ConfigurationForm = ({ onSubmit }) => {
     const newErrors = {};
     let isValid = true;
 
-    if (config.totalTickets <= 0) {
-      newErrors.totalTickets = 'Total Tickets must be greater than 0.';
-      isValid = false;
-    }
-    if (config.ticketReleaseRate <= 0) {
-      newErrors.ticketReleaseRate = 'Ticket Release Rate must be greater than 0.';
-      isValid = false;
-    }
-    if (config.customerRetrievalRate <= 0) {
-      newErrors.customerRetrievalRate = 'Customer Retrieval Rate must be greater than 0.';
-      isValid = false;
-    }
-    if (config.maxTicketCapacity <= 0) {
-      newErrors.maxTicketCapacity = 'Max Ticket Capacity must be greater than 0.';
-      isValid = false;
-    }
-    if (config.numberOfVendors <= 0) {
-      newErrors.numberOfVendors = 'Number of Vendors must be greater than 0.';
-      isValid = false;
-    }
-    if (config.numberOfCustomers <= 0) {
-      newErrors.numberOfCustomers = 'Number of Customers must be greater than 0.';
-      isValid = false;
-    }
+    Object.entries(config).forEach(([key, value]) => {
+      if (value <= 0) {
+        newErrors[key] = `${key.replace(/([A-Z])/g, ' $1')} must be greater than 0.`;
+        isValid = false;
+      }
+    });
 
     setErrors(newErrors);
     return isValid;
@@ -61,9 +42,7 @@ const ConfigurationForm = ({ onSubmit }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!validateForm()) {
-      return;
-    }
+    if (!validateForm()) return;
 
     onSubmit(config);
 
@@ -79,23 +58,30 @@ const ConfigurationForm = ({ onSubmit }) => {
 
   return (
     <div>
-      <h2>Configuration Form</h2>
+      <h2>{selectedConfig ? 'Update Configuration' : 'Create Configuration'}</h2>
       <form onSubmit={handleSubmit}>
-        {['totalTickets', 'ticketReleaseRate', 'customerRetrievalRate', 'maxTicketCapacity', 'numberOfVendors', 'numberOfCustomers'].map(field => (
+        {Object.keys(config).map((field) => (
           <div key={field}>
-            <label>{field.replace(/([A-Z])/g, ' $1').toUpperCase()}:</label>
-            <input
-              type="number"
-              name={field}
-              value={config[field]}
-              onChange={handleChange}
-              required
-            />
+            <label>
+              {field.replace(/([A-Z])/g, ' $1').toUpperCase()}:
+              <input
+                type="number"
+                name={field}
+                value={config[field]}
+                onChange={handleChange}
+                required
+              />
+            </label>
             {errors[field] && <p style={{ color: 'red' }}>{errors[field]}</p>}
           </div>
         ))}
-        <button type="submit">Save Configuration</button>
+        <button type="submit">{selectedConfig ? 'Update Configuration' : 'Save Configuration'}</button>
       </form>
+
+      {/* Go to Dashboard button */}
+      <button onClick={onGoToDashboard} style={{ marginTop: '20px' }}>
+        Go to Dashboard
+      </button>
     </div>
   );
 };

@@ -1,0 +1,16 @@
+div {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  h2 {
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  canvas {
+    margin-top: 20px;
+    width: 100%;
+    max-width: 800px;
+  }
+  

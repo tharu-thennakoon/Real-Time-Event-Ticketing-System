@@ -1,0 +1,14 @@
+form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  label {
+    margin-bottom: 5px;
+  }
+  
+  p {
+    font-size: 12px;
+    color: #ff8080;
+  }
+  

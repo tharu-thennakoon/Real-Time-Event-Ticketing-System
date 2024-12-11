@@ -1,6 +1,7 @@
 // Dashboard.js
 import React, { useState } from 'react';
 import CustomerVsVendorChart from '../components/CustomerVsVendorChart';
+import './Dashboard.css';
 
 const Dashboard = () => {
   const [isRunning, setIsRunning] = useState(false);
