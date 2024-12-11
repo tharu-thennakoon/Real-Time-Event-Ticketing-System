@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import './configurationForm.css'
+import './configurationForm.css';
 
-const ConfigurationForm = ({ onSubmit, selectedConfig, onGoToDashboard }) => {
+const ConfigurationForm = ({ onSubmit, selectedConfig, onDelete }) => {
   const [config, setConfig] = useState({
     totalTickets: '',
     ticketReleaseRate: '',
@@ -21,7 +21,7 @@ const ConfigurationForm = ({ onSubmit, selectedConfig, onGoToDashboard }) => {
 
   const handleChange = (e) => {
     setConfig({ ...config, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: '' });
+    setErrors({ ...errors, [e.target.name]: '' }); // Reset error when user starts typing
   };
 
   const validateForm = () => {
@@ -76,12 +76,12 @@ const ConfigurationForm = ({ onSubmit, selectedConfig, onGoToDashboard }) => {
           </div>
         ))}
         <button type="submit">{selectedConfig ? 'Update Configuration' : 'Save Configuration'}</button>
+        {selectedConfig && (
+          <button type="button" onClick={() => onDelete(selectedConfig.id)} style={{ marginTop: '10px' }}>
+            Delete Configuration
+          </button>
+        )}
       </form>
-
-      {/* Go to Dashboard button */}
-      <button onClick={onGoToDashboard} style={{ marginTop: '20px' }}>
-        Go to Dashboard
-      </button>
     </div>
   );
 };
