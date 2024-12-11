@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -13,56 +13,60 @@ import {
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-const CustomerVsVendorChart = () => {
+const CustomerVsVendorChart = ({ isRunning }) => {
   const [chartData, setChartData] = useState({
-    labels: [], // Time intervals (e.g., T1, T2)
+    labels: [],
     datasets: [
       {
         label: 'Tickets Issued by Vendors',
-        data: [], // Number of tickets issued by vendors
+        data: [],
         borderColor: 'rgba(75, 192, 192, 1)',
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        tension: 0.4, // Smooth line
-        fill: true, // Fill area under the line
+        tension: 0.4,
+        fill: true,
       },
       {
         label: 'Tickets Retrieved by Customers',
-        data: [], // Number of tickets retrieved by customers
+        data: [],
         borderColor: 'rgba(255, 99, 132, 1)',
         backgroundColor: 'rgba(255, 99, 132, 0.2)',
-        tension: 0.4, // Smooth line
-        fill: true, // Fill area under the line
+        tension: 0.4,
+        fill: true,
       },
     ],
   });
 
-  // Simulate real-time updates for customer vs vendor data
   useEffect(() => {
-    const interval = setInterval(() => {
-      setChartData((prevData) => {
-        const currentTime = prevData.labels.length + 1; // Mock time intervals (e.g., seconds)
-        const ticketsIssued = Math.floor(Math.random() * 10); // Mock vendor ticket issuance
-        const ticketsRetrieved = Math.floor(Math.random() * 8); // Mock customer ticket retrieval
+    let interval;
+    if (isRunning) {
+      interval = setInterval(() => {
+        setChartData((prevData) => {
+          const currentTime = prevData.labels.length + 1;
+          const ticketsIssued = Math.floor(Math.random() * 10);
+          const ticketsRetrieved = Math.floor(Math.random() * 8);
 
-        return {
-          ...prevData,
-          labels: [...prevData.labels, `T${currentTime}`], // Append new time
-          datasets: [
-            {
-              ...prevData.datasets[0],
-              data: [...prevData.datasets[0].data, ticketsIssued], // Append vendor data
-            },
-            {
-              ...prevData.datasets[1],
-              data: [...prevData.datasets[1].data, ticketsRetrieved], // Append customer data
-            },
-          ],
-        };
-      });
-    }, 1000); // Update every 1 second
+          return {
+            ...prevData,
+            labels: [...prevData.labels, `T${currentTime}`],
+            datasets: [
+              {
+                ...prevData.datasets[0],
+                data: [...prevData.datasets[0].data, ticketsIssued],
+              },
+              {
+                ...prevData.datasets[1],
+                data: [...prevData.datasets[1].data, ticketsRetrieved],
+              },
+            ],
+          };
+        });
+      }, 1000); // Update every 1 second
+    } else {
+      clearInterval(interval); // Stop updates when simulation is stopped
+    }
 
-    return () => clearInterval(interval); // Cleanup interval on component unmount
-  }, []);
+    return () => clearInterval(interval); // Cleanup interval on component unmount or stop
+  }, [isRunning]);
 
   return (
     <div>
