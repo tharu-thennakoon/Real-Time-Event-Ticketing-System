@@ -1,3 +1,4 @@
+// CustomerVsVendorChart.js
 import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import {
@@ -42,31 +43,31 @@ const CustomerVsVendorChart = ({ isRunning }) => {
       interval = setInterval(() => {
         setChartData((prevData) => {
           const currentTime = prevData.labels.length + 1;
-          const ticketsIssued = Math.floor(Math.random() * 10);
-          const ticketsRetrieved = Math.floor(Math.random() * 8);
+          const ticketsIssued = Math.floor(Math.random() * 10);  // Simulate ticket issued by vendor
+          const ticketsRetrieved = Math.floor(Math.random() * 8);  // Simulate ticket retrieved by customer
 
           return {
             ...prevData,
-            labels: [...prevData.labels, `T${currentTime}`],
+            labels: [...prevData.labels, `T${currentTime}`],  // Add time label
             datasets: [
               {
                 ...prevData.datasets[0],
-                data: [...prevData.datasets[0].data, ticketsIssued],
+                data: [...prevData.datasets[0].data, ticketsIssued],  // Update vendor tickets data
               },
               {
                 ...prevData.datasets[1],
-                data: [...prevData.datasets[1].data, ticketsRetrieved],
+                data: [...prevData.datasets[1].data, ticketsRetrieved],  // Update customer tickets data
               },
             ],
           };
         });
-      }, 1000); // Update every 1 second
+      }, 1000);  // Update every 1 second
     } else {
-      clearInterval(interval); // Stop updates when simulation is stopped
+      clearInterval(interval);  // Stop updating when simulation is stopped
     }
 
-    return () => clearInterval(interval); // Cleanup interval on component unmount or stop
-  }, [isRunning]);
+    return () => clearInterval(interval);  // Cleanup interval when the component is unmounted or isRunning changes
+  }, [isRunning]);  // Only re-run when the 'isRunning' state changes
 
   return (
     <div>

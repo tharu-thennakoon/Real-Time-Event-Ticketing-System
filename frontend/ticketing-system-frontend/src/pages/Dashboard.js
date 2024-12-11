@@ -1,36 +1,67 @@
+// Dashboard.js
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import TicketStatus from '../components/TicketStatus';
-import ControlPanel from '../components/ControlPanel';
-import LogDisplay from '../components/LogDisplay';
-import TicketSalesChart from '../components/CustomerVsVendorChart';
+import CustomerVsVendorChart from '../components/CustomerVsVendorChart';
 
 const Dashboard = () => {
-  const location = useLocation();
-  const config = location.state?.config || {};
-
   const [isRunning, setIsRunning] = useState(false);
+  const [totalTickets, setTotalTickets] = useState(100);  // From configuration
+  const [releasedTickets, setReleasedTickets] = useState(0);  // Tracks released tickets
+  const [purchasedTickets, setPurchasedTickets] = useState(0);  // Tracks purchased tickets
+  const [config, setConfig] = useState({
+    totalTickets: 100,
+    ticketReleaseRate: 500,
+    customerRetrievalRate: 500,
+    maxTicketCapacity: 1000,
+    numberOfVendors: 3,
+    numberOfCustomers: 5,
+  });
 
   const handleStart = () => {
-    setIsRunning(true);  // Start the simulation and trigger the chart update
+    setIsRunning(true);  // Start simulation
+    // Start simulating ticket release and purchase
+    simulateTickets();
   };
 
-  const handleStop = () => {
-    setIsRunning(false);  // Stop the simulation and stop the chart update
-  };
+  const handleStop = () => setIsRunning(false);  // Stop simulation
 
-  const handleReset = () => {
-    setIsRunning(false);  // Stop updates
-    // Reset other necessary data here, e.g., reset chart data if needed
+  const simulateTickets = () => {
+    const releaseInterval = setInterval(() => {
+      if (isRunning) {
+        setReleasedTickets((prev) => prev + 1);  // Increment released tickets
+      } else {
+        clearInterval(releaseInterval);
+      }
+    }, config.ticketReleaseRate);
+
+    const purchaseInterval = setInterval(() => {
+      if (isRunning) {
+        setPurchasedTickets((prev) => prev + 1);  // Increment purchased tickets
+      } else {
+        clearInterval(purchaseInterval);
+      }
+    }, config.customerRetrievalRate);
   };
 
   return (
     <div style={{ padding: '20px' }}>
       <h1>Ticket System Dashboard</h1>
-      <TicketStatus config={config} />
-      <ControlPanel onStart={handleStart} onStop={handleStop} onReset={handleReset} />
-      <TicketSalesChart isRunning={isRunning} />  {/* Pass isRunning state */}
-      <LogDisplay />
+      
+      
+
+      <div>
+        <h2>Control Panel</h2>
+        <button onClick={handleStart} style={{ marginRight: '10px' }}>Start</button>
+        <button onClick={handleStop} style={{ marginRight: '10px' }}>Stop</button>
+      </div>
+
+      <CustomerVsVendorChart isRunning={isRunning} />  {/* The chart updates based on 'isRunning' */}
+
+      <div>
+        <h2>Simulation Details</h2>
+        <p><strong>Total Tickets:</strong> {totalTickets}</p>
+        <p><strong>Released Tickets:</strong> {releasedTickets}</p>
+        <p><strong>Purchased Tickets:</strong> {purchasedTickets}</p>
+      </div>
     </div>
   );
 };

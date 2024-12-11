@@ -63,11 +63,7 @@ public class TicketPoolController {
         return ticketPoolService.stopSimulation();
     }
 
-    // Reset simulation
-    @GetMapping("/reset-simulation")
-    public String resetSimulation() {
-        return ticketPoolService.resetSimulation();
-    }
+    
 
     // Get analytics
     @GetMapping("/analytics")
