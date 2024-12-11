@@ -16,6 +16,7 @@ public class TicketPool {
         this.maxCapacity = maxCapacity;
     }
 
+    // Method to add tickets to the pool
     public synchronized void addTickets(int count) {
         try {
             while (tickets.size() >= maxCapacity || totalTicketsIssued >= maxCapacity) {
@@ -31,10 +32,11 @@ public class TicketPool {
             notifyAll();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            System.out.println("Ticket addition was interrupted: " + e.getMessage());
+            System.out.println("Ticket addition interrupted: " + e.getMessage());
         }
     }
 
+    // Method to remove a ticket from the pool
     public synchronized int removeTicket() {
         try {
             while (tickets.isEmpty()) {
@@ -45,15 +47,17 @@ public class TicketPool {
             return ticketId;
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            System.out.println("Ticket removal was interrupted: " + e.getMessage());
+            System.out.println("Ticket removal interrupted: " + e.getMessage());
             return -1; // Indicating failure to remove ticket
         }
     }
 
+    // Method to get the current number of tickets in the pool
     public synchronized int getCurrentTicketCount() {
         return tickets.size();
     }
 
+    // Method to get the total number of tickets issued
     public synchronized int getTotalTicketsIssued() {
         return totalTicketsIssued;
     }

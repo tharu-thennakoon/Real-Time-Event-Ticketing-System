@@ -20,12 +20,13 @@ public class Vendor implements Runnable {
         try {
             while (!Thread.currentThread().isInterrupted()) {
                 synchronized (ticketPool) {
+                    // Check if total tickets have been issued, if yes, stop the vendor thread
                     if (ticketPool.getTotalTicketsIssued() >= maxTickets) {
                         System.out.println(LocalDateTime.now().format(formatter) + " - " + Thread.currentThread().getName() + " has stopped. All tickets issued.");
                         return; // Stop thread when max tickets are issued
                     }
                 }
-                ticketPool.addTickets(1);
+                ticketPool.addTickets(1); // Add one ticket to the pool
                 System.out.println(LocalDateTime.now().format(formatter) + " - " + Thread.currentThread().getName() + " added a ticket.");
                 Thread.sleep(ticketReleaseRate * 1000); // Simulate ticket release delay
             }
