@@ -1,24 +1,11 @@
-
-div {
-    padding: 20px;
-    font-family: Arial, sans-serif;
-  }
-  
-  h2 {
-    color: #333;
-    margin-bottom: 20px;
-  }
-  
-  ul {
-    list-style: none;
-    padding: 0;
+h2 {
+    font-size: 18px;
+    color: #006600; /* Dark green */
   }
   
   li {
-    background-color: #f8f9fa;
-    border: 1px solid #ddd;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 4px;
+    font-size: 14px;
+    color: #333;
+    line-height: 1.5;
   }
   

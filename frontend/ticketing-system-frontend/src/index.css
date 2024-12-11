@@ -2,59 +2,60 @@ body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
-    background: linear-gradient(to bottom, #0f2b0f, #060f09); /* Dark green to light green */
-    color: rgb(240, 235, 235);
+    background: linear-gradient(to bottom, #e6ffe6, #ffffff); /* Light green to white gradient */
+    color: #333; /* Dark text for readability */
     min-height: 100vh;
-  }
-  
-  div {
-    padding: 20px;
-    margin: auto;
-    width: 90%;
-    max-width: 600px;
-    background-color: rgba(22, 21, 21, 0.7); /* Transparent dark background */
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   
   h1, h2 {
     text-align: center;
+    color: #006600; /* Dark green for headings */
+    margin-bottom: 10px;
+  }
+  
+  p, label {
+    color: #333; /* Standard text color */
+    font-size: 16px;
+    margin: 10px 0;
   }
   
   button {
-    width: 100%;
-    padding: 10px;
-    background-color: #ebf3eb; /* Darker green for buttons */
+    padding: 10px 20px;
+    background-color: #66cc66; /* Light green button */
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    margin: 10px 0;
+    font-size: 16px;
+    margin-top: 10px;
   }
   
   button:hover {
-    background-color: #021b0a; /* Lighter green on hover */
+    background-color: #55aa55; /* Slightly darker green on hover */
   }
   
   input, select {
     width: 100%;
     padding: 8px;
-    margin: 10px 0;
+    margin-top: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    font-size: 14px;
   }
   
   ul {
     list-style: none;
     padding: 0;
+    margin-top: 10px;
   }
   
   li {
-    background-color: rgba(255, 255, 255, 0.1); /* Light overlay */
+    background-color: #f2f2f2; /* Very light grey for item background */
     padding: 10px;
-    margin: 5px 0;
+    margin-bottom: 5px;
     border-radius: 4px;
-    color: white;
-    font-size: 14px;
   }
   
