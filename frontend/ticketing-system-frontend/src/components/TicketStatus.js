@@ -1,18 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-const TicketStatus = () => {
-  const [analytics, setAnalytics] = useState({
-    totalTicketsIssued: 300,
-    currentPoolSize: 50,
-    maxPoolCapacity: 1000,
-  });
-
+const TicketStatus = ({ config }) => {
   return (
     <div>
       <h2>Ticket Pool Status</h2>
-      <p><strong>Total Tickets Issued:</strong> {analytics.totalTicketsIssued}</p>
-      <p><strong>Current Pool Size:</strong> {analytics.currentPoolSize}</p>
-      <p><strong>Max Pool Capacity:</strong> {analytics.maxPoolCapacity}</p>
+      <p><strong>Total Tickets:</strong> {config.totalTickets || 'N/A'}</p>
+      <p><strong>Current Pool Size:</strong> {config.maxTicketCapacity || 'N/A'}</p>
+      <p><strong>Number of Vendors:</strong> {config.numberOfVendors || 'N/A'}</p>
+      <p><strong>Number of Customers:</strong> {config.numberOfCustomers || 'N/A'}</p>
     </div>
   );
 };

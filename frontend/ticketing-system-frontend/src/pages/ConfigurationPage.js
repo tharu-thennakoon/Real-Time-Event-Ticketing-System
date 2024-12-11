@@ -1,28 +1,31 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ConfigurationForm from '../components/ConfigurationForm';
 
 const ConfigurationPage = () => {
   const [configurations, setConfigurations] = useState([]);
+  const [currentConfig, setCurrentConfig] = useState(null); // To store the current configuration
+  const navigate = useNavigate();
 
   const handleCreate = (newConfig) => {
-    setConfigurations([...configurations, { id: Date.now(), ...newConfig }]);
+    const updatedConfig = { id: Date.now(), ...newConfig };
+    setConfigurations([...configurations, updatedConfig]);
+    setCurrentConfig(updatedConfig); // Save the latest configuration for passing to the dashboard
   };
 
-  const handleDelete = (id) => {
-    setConfigurations(configurations.filter((config) => config.id !== id));
-  };
-
-  const handleUpdate = (updatedConfig) => {
-    setConfigurations(configurations.map((config) =>
-      config.id === updatedConfig.id ? updatedConfig : config
-    ));
+  const goToDashboard = () => {
+    if (!currentConfig) {
+      alert('Please fill out the configuration form first.');
+      return;
+    }
+    navigate('/dashboard', { state: { config: currentConfig } }); // Pass configuration to the dashboard
   };
 
   return (
     <div style={{ padding: '20px' }}>
       <h1>Configuration Management</h1>
       <ConfigurationForm onSubmit={handleCreate} />
-      <h2>Configurations</h2>
+      <h2>Saved Configurations</h2>
       <ul>
         {configurations.map((config) => (
           <li key={config.id}>
@@ -31,17 +34,23 @@ const ConfigurationPage = () => {
               <strong>Total Tickets:</strong> {config.totalTickets} <br />
               <strong>Ticket Release Rate:</strong> {config.ticketReleaseRate} ms
             </p>
-            <button onClick={() => handleDelete(config.id)}>Delete</button>
-            <button
-              onClick={() =>
-                handleUpdate({ ...config, totalTickets: config.totalTickets + 10 })
-              }
-            >
-              Update (+10 Tickets)
-            </button>
           </li>
         ))}
       </ul>
+      <button
+        style={{
+          backgroundColor: '#007BFF',
+          color: '#fff',
+          padding: '10px 15px',
+          border: 'none',
+          borderRadius: '5px',
+          cursor: 'pointer',
+          marginTop: '20px',
+        }}
+        onClick={goToDashboard}
+      >
+        Go to Dashboard
+      </button>
     </div>
   );
 };
