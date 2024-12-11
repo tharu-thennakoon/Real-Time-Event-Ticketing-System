@@ -2,7 +2,7 @@ import React from 'react';
 import TicketStatus from '../components/TicketStatus';
 import ControlPanel from '../components/ControlPanel';
 import LogDisplay from '../components/LogDisplay';
-import TicketSalesChart from '../components/TicketSalesChart';
+import TicketSalesChart from '../components/CustomerVsVendorChart';
 
 const Dashboard = () => {
   return (
