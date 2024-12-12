@@ -13,9 +13,9 @@ public class CustomerThread implements Runnable {
     @Override
     public void run() {
         try {
-            while (ticketPoolService.getTotalTicketsIssued() > 0) {
+            while (true) {
                 ticketPoolService.removeTicket();
-                Thread.sleep(retrievalRate);  // Simulate ticket retrieval
+                Thread.sleep(retrievalRate); // Simulate retrieval delay
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();

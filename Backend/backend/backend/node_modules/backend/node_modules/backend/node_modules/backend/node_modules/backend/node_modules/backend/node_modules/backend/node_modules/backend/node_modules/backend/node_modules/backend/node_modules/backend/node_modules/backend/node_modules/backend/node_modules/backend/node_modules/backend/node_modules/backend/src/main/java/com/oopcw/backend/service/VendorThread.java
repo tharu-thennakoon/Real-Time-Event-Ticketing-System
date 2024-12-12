@@ -15,9 +15,9 @@ public class VendorThread implements Runnable {
     @Override
     public void run() {
         try {
-            while (ticketPoolService.getTotalTicketsIssued() < maxTickets) {
+            for (int i = 0; i < maxTickets; i++) {
                 ticketPoolService.addTickets(1);
-                Thread.sleep(ticketReleaseRate);  // Simulate ticket release
+                Thread.sleep(ticketReleaseRate); // Simulate release delay
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();

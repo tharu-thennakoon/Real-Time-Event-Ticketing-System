@@ -1,41 +1,39 @@
-div {
-    padding: 20px;
-    font-family: Arial, sans-serif;
-  }
-  
-  h1 {
-    color: #333;
-    margin-bottom: 20px;
-  }
-  
-  h2 {
-    color: #555;
-    margin-top: 20px;
-  }
-  
-  ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  li {
-    background-color: #f8f9fa;
-    border: 1px solid #ddd;
-    padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 4px;
-  }
-  
-  button {
-    padding: 8px 15px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-  
+/* Style for the ConfigurationPage */
+.configuration-page {
+  padding: 20px;
+  background-color: #f4f7fb;
+}
+
+.configuration-page h1 {
+  text-align: center;
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+.configuration-page h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.configuration-page ul {
+  padding-left: 20px;
+  margin-bottom: 20px;
+}
+
+.configuration-page li {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.configuration-page button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.configuration-page button:hover {
+  background-color: #0056b3;
+}

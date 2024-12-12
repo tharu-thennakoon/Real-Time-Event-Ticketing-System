@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './configurationForm.css';
 
-const ConfigurationForm = ({ onSubmit, selectedConfig, onDelete }) => {
+const ConfigurationForm = ({ onSubmit }) => {
   const [config, setConfig] = useState({
     totalTickets: '',
     ticketReleaseRate: '',
@@ -11,13 +11,14 @@ const ConfigurationForm = ({ onSubmit, selectedConfig, onDelete }) => {
     numberOfCustomers: '',
   });
 
-  const [errors, setErrors] = useState({});
-
-  useEffect(() => {
-    if (selectedConfig) {
-      setConfig(selectedConfig);
-    }
-  }, [selectedConfig]);
+  const [errors, setErrors] = useState({
+    totalTickets: '',
+    ticketReleaseRate: '',
+    customerRetrievalRate: '',
+    maxTicketCapacity: '',
+    numberOfVendors: '',
+    numberOfCustomers: '',
+  });
 
   const handleChange = (e) => {
     setConfig({ ...config, [e.target.name]: e.target.value });
@@ -28,24 +29,48 @@ const ConfigurationForm = ({ onSubmit, selectedConfig, onDelete }) => {
     const newErrors = {};
     let isValid = true;
 
-    Object.entries(config).forEach(([key, value]) => {
-      if (value <= 0) {
-        newErrors[key] = `${key.replace(/([A-Z])/g, ' $1')} must be greater than 0.`;
-        isValid = false;
-      }
-    });
+    // Validate each field
+    if (config.totalTickets <= 0) {
+      newErrors.totalTickets = 'Total Tickets must be greater than 0.';
+      isValid = false;
+    }
+    if (config.ticketReleaseRate <= 0) {
+      newErrors.ticketReleaseRate = 'Ticket Release Rate must be greater than 0.';
+      isValid = false;
+    }
+    if (config.customerRetrievalRate <= 0) {
+      newErrors.customerRetrievalRate = 'Customer Retrieval Rate must be greater than 0.';
+      isValid = false;
+    }
+    if (config.maxTicketCapacity <= 0) {
+      newErrors.maxTicketCapacity = 'Max Ticket Capacity must be greater than 0.';
+      isValid = false;
+    }
+    if (config.numberOfVendors <= 0) {
+      newErrors.numberOfVendors = 'Number of Vendors must be greater than 0.';
+      isValid = false;
+    }
+    if (config.numberOfCustomers <= 0) {
+      newErrors.numberOfCustomers = 'Number of Customers must be greater than 0.';
+      isValid = false;
+    }
 
-    setErrors(newErrors);
+    setErrors(newErrors); // Set error messages
     return isValid;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!validateForm()) return;
+    // Validate the form before submitting
+    if (!validateForm()) {
+      return; // Don't submit if the form is invalid
+    }
 
+    // If valid, submit the form data
     onSubmit(config);
 
+    // Reset form after submission
     setConfig({
       totalTickets: '',
       ticketReleaseRate: '',
@@ -58,29 +83,93 @@ const ConfigurationForm = ({ onSubmit, selectedConfig, onDelete }) => {
 
   return (
     <div>
-      <h2>{selectedConfig ? 'Update Configuration' : 'Create Configuration'}</h2>
+      <h2>Configuration Form</h2>
       <form onSubmit={handleSubmit}>
-        {Object.keys(config).map((field) => (
-          <div key={field}>
-            <label>
-              {field.replace(/([A-Z])/g, ' $1').toUpperCase()}:
-              <input
-                type="number"
-                name={field}
-                value={config[field]}
-                onChange={handleChange}
-                required
-              />
-            </label>
-            {errors[field] && <p style={{ color: 'red' }}>{errors[field]}</p>}
-          </div>
-        ))}
-        <button type="submit">{selectedConfig ? 'Update Configuration' : 'Save Configuration'}</button>
-        {selectedConfig && (
-          <button type="button" onClick={() => onDelete(selectedConfig.id)} style={{ marginTop: '10px' }}>
-            Delete Configuration
-          </button>
-        )}
+        <div>
+          <label>
+            Total Tickets:
+            <input
+              type="number"
+              name="totalTickets"
+              value={config.totalTickets}
+              onChange={handleChange}
+              required
+            />
+          </label>
+          {errors.totalTickets && <p style={{ color: 'red' }}>{errors.totalTickets}</p>}
+        </div>
+        <br />
+        <div>
+          <label>
+            Ticket Release Rate (ms):
+            <input
+              type="number"
+              name="ticketReleaseRate"
+              value={config.ticketReleaseRate}
+              onChange={handleChange}
+              required
+            />
+          </label>
+          {errors.ticketReleaseRate && <p style={{ color: 'red' }}>{errors.ticketReleaseRate}</p>}
+        </div>
+        <br />
+        <div>
+          <label>
+            Customer Retrieval Rate (ms):
+            <input
+              type="number"
+              name="customerRetrievalRate"
+              value={config.customerRetrievalRate}
+              onChange={handleChange}
+              required
+            />
+          </label>
+          {errors.customerRetrievalRate && <p style={{ color: 'red' }}>{errors.customerRetrievalRate}</p>}
+        </div>
+        <br />
+        <div>
+          <label>
+            Max Ticket Capacity:
+            <input
+              type="number"
+              name="maxTicketCapacity"
+              value={config.maxTicketCapacity}
+              onChange={handleChange}
+              required
+            />
+          </label>
+          {errors.maxTicketCapacity && <p style={{ color: 'red' }}>{errors.maxTicketCapacity}</p>}
+        </div>
+        <br />
+        <div>
+          <label>
+            Number of Vendors:
+            <input
+              type="number"
+              name="numberOfVendors"
+              value={config.numberOfVendors}
+              onChange={handleChange}
+              required
+            />
+          </label>
+          {errors.numberOfVendors && <p style={{ color: 'red' }}>{errors.numberOfVendors}</p>}
+        </div>
+        <br />
+        <div>
+          <label>
+            Number of Customers:
+            <input
+              type="number"
+              name="numberOfCustomers"
+              value={config.numberOfCustomers}
+              onChange={handleChange}
+              required
+            />
+          </label>
+          {errors.numberOfCustomers && <p style={{ color: 'red' }}>{errors.numberOfCustomers}</p>}
+        </div>
+        <br />
+        <button type="submit">Save Configuration</button>
       </form>
     </div>
   );

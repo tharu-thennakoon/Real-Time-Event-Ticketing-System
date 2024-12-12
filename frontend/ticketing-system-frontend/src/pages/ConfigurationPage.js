@@ -1,82 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import ConfigurationForm from '../components/ConfigurationForm';
-
-const API_BASE_URL = 'http://localhost:8080/api/ticket-pool';
+import './configurationPage.css';
 
 const ConfigurationPage = () => {
   const [configurations, setConfigurations] = useState([]);
-  const [selectedConfig, setSelectedConfig] = useState(null);
+  const [currentConfig, setCurrentConfig] = useState(null); // To store the current configuration
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // Fetch configurations on component mount
-    const fetchConfigurations = async () => {
-      try {
-        const response = await axios.get(API_BASE_URL + '/configuration');
-        setConfigurations([response.data]);
-      } catch (error) {
-        console.error('Error fetching configurations:', error);
-      }
-    };
-
-    fetchConfigurations();
-  }, []);
-
-  const handleCreateOrUpdate = async (config) => {
-    try {
-      if (config.id) {
-        // Update existing configuration
-        const response = await axios.put(`${API_BASE_URL}/configuration/${config.id}`, config);
-        setConfigurations(configurations.map((item) => 
-          item.id === config.id ? response.data : item
-        ));
-      } else {
-        // Create new configuration
-        const response = await axios.post(API_BASE_URL + '/configuration', config);
-        setConfigurations([...configurations, response.data]);
-      }
-      
-      setSelectedConfig(null);
-    } catch (error) {
-      console.error('Error saving configuration:', error);
-    }
+  const handleCreate = (newConfig) => {
+    const updatedConfig = { id: Date.now(), ...newConfig };
+    setConfigurations([...configurations, updatedConfig]);
+    setCurrentConfig(updatedConfig); // Save the latest configuration for passing to the dashboard
   };
 
-  const handleEdit = (config) => {
-    setSelectedConfig(config);
-  };
-
-  const handleDelete = async (id) => {
-    try {
-      await axios.delete(`${API_BASE_URL}/configuration/${id}`);
-      setConfigurations(configurations.filter((config) => config.id !== id));
-      setSelectedConfig(null);
-    } catch (error) {
-      console.error('Error deleting configuration:', error);
+  const goToDashboard = () => {
+    if (!currentConfig) {
+      alert('Please fill out the configuration form first.');
+      return;
     }
-  };
-
-  const goToDashboard = async () => {
-    try {
-      // Fetch the last configuration to pass to dashboard
-      const response = await axios.get(API_BASE_URL + '/configuration');
-      navigate('/dashboard', { state: { config: response.data } });
-    } catch (error) {
-      console.error('Error fetching configuration:', error);
-      navigate('/dashboard');
-    }
+    navigate('/dashboard', { state: { config: currentConfig } }); // Pass configuration to the dashboard
   };
 
   return (
     <div style={{ padding: '20px' }}>
       <h1>Configuration Management</h1>
-      <ConfigurationForm 
-        onSubmit={handleCreateOrUpdate} 
-        selectedConfig={selectedConfig} 
-        onDelete={handleDelete} 
-      />
+      <ConfigurationForm onSubmit={handleCreate} />
       <h2>Saved Configurations</h2>
       <ul>
         {configurations.map((config) => (
@@ -86,11 +35,23 @@ const ConfigurationPage = () => {
               <strong>Total Tickets:</strong> {config.totalTickets} <br />
               <strong>Ticket Release Rate:</strong> {config.ticketReleaseRate} ms
             </p>
-            <button onClick={() => handleEdit(config)}>Edit</button>
           </li>
         ))}
       </ul>
-      <button onClick={goToDashboard}>Go to Dashboard</button>
+      <button
+        style={{
+          backgroundColor: '#007BFF',
+          color: '#fff',
+          padding: '10px 15px',
+          border: 'none',
+          borderRadius: '5px',
+          cursor: 'pointer',
+          marginTop: '20px',
+        }}
+        onClick={goToDashboard}
+      >
+        Go to Dashboard
+      </button>
     </div>
   );
 };
